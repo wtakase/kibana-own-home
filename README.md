@@ -7,17 +7,17 @@ Each user has own `kibana.index`.
 
 ![objects separation] (https://github.com/wtakase/kibana-own-home/raw/master/images/objects_separation.png "objects separation")
 
+This plugin enables a user to have own personal `kibana.index` so that objects the user created are stored to separate location from others. And also group shared `kibana.index` can be provided. A user can switch `kibana.index` depending on the situation by selecting on the plugin interface. Available `kibana.index` list will be generated based on username, local group definition in kibana.yml, and LDAP roles.
+
 ## Background
 
 In the case of single Kibana instance shared among many users/groups, all objects (searches, vizualizations, dashboards) are stored to the same `kibana.index`. This means that any user can access, modify, and also delete all objects. In multi-user environment, in order to protect own objects from others or share part of objects among a group, `kibana.index` separation is one of the solutions.
-
-This plugin enables a user to have own personal `kibana.index` so that objects the user created are stored to separate location from others. And also group shared `kibana.index` can be provided. A user can switch `kibana.index` depending on the situation by selecting on the plugin interface. Available `kibana.index` list will be generated based on username, local group definition in kibana.yml, and LDAP roles.
 
 ## How it works
 
 ![overview] (https://github.com/wtakase/kibana-own-home/raw/master/images/overview.png "overview")
 
-This plugin starts up a proxy server on the same host of Kibana with port 19200.
+This plugin starts up a proxy server with port 19200 on the same host of Kibana.
 And the proxy server intercepts ElasticSearch request in order to replace `kibana.index` with specified one.
 
  * Kibana runs behind of a reverse proxy web server such httpd/nginx.
@@ -38,11 +38,9 @@ And the proxy server intercepts ElasticSearch request in order to replace `kiban
 
 ## Prerequirement
 
-A reverse proxy server such as httpd, nginx is required as a front end of Kibana.
-
-Authentication is required at the server.
-
-After the authentication the server proxies user's requests to Kibana with `x-proxy-user` header which contains username.
+* A reverse proxy server such as httpd, nginx is required as a front end of Kibana.
+* Authentication is required at the server.
+* After the authentication the server proxies user's requests to Kibana with `x-proxy-user` header which contains username.
 
 ### Example of httpd configuration with Basic authentication
 
@@ -135,12 +133,12 @@ Set kibana.yml as follows:
 ```
 elasticsearch.url: https://localhost:19200
 elasticsearch.ssl.ca: /path/to/this/proxy/server/cert/CA.crt
-elasticsearch.requestHeadersWhitelist: [ x-proxy-user, cookie ]
+elasticsearch.requestHeadersWhitelist: [ remote-user, cookie ]
 own_home.proxy_user_header: remote-user
 own_home.proxy.ssl.cert: /path/to/this/proxy/server.crt
 own_home.proxy.ssl.key: /path/to/this/proxy/server.key
 own_home.elasticsearch.url: https://localhost:9200
-own_home.elasticsearch.ssl.ca: /path/to/this/elasticsearch/server/cert/CA.crt
+own_home.elasticsearch.ssl.ca: /path/to/elasticsearch/server/cert/CA.crt
 own_home.session.secretkey: the-password-must-be-at-least-32-characters-long
 own_home.local.groups: [ public, sandbox ]
 own_home.ldap.enabled: true
