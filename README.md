@@ -75,8 +75,8 @@ $ npm install
 Available optins and default values are as follows:
 ```
 own_home.proxy_user_header: x-proxy-user
-own_home.proxy.ssl.cert: '' <-- specify this proxy's server cert location if necessary
-own_home.proxy.ssl.key: '' <-- specify this proxy's server key location if necessary
+own_home.ssl.cert: '' <-- specify this proxy's server cert location if necessary
+own_home.ssl.key: '' <-- specify this proxy's server key location if necessary
 own_home.elasticsearch.url: http://localhost:9200
 own_home.elasticsearch.ssl.ca: '' <-- specify your elasticsearch cert's CA cert location if necessary
 own_home.session.secretkey: the-password-must-be-at-least-32-characters-long
@@ -135,8 +135,8 @@ elasticsearch.url: https://localhost:19200
 elasticsearch.ssl.ca: /path/to/this/proxy/server/cert/CA.crt
 elasticsearch.requestHeadersWhitelist: [ remote-user, cookie ]
 own_home.proxy_user_header: remote-user
-own_home.proxy.ssl.cert: /path/to/this/proxy/server.crt
-own_home.proxy.ssl.key: /path/to/this/proxy/server.key
+own_home.ssl.cert: /path/to/this/proxy/server.crt
+own_home.ssl.key: /path/to/this/proxy/server.key
 own_home.elasticsearch.url: https://localhost:9200
 own_home.elasticsearch.ssl.ca: /path/to/elasticsearch/server/cert/CA.crt
 own_home.session.secretkey: the-password-must-be-at-least-32-characters-long

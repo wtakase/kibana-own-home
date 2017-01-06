@@ -18,7 +18,7 @@ module.exports = function(kbnServer) {
     register: require('kibi-h2o2')
   }, function (err) {
     if (err) {
-      kbnServer.log(['plugin:own-home', 'error'], 'Failed to load kibi_h2o2');
+      kbnServer.log(['plugin:own-home', 'error'], 'Failed to load kibi-h2o2');
     }
   });
 
