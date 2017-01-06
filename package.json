@@ -16,7 +16,7 @@
   },
   "devDependencies": {
     "@elastic/eslint-config-kibana": "0.0.2",
-    "@elastic/plugin-helpers": "5.0.1",
+    "@elastic/plugin-helpers": "5.1.1",
     "babel-eslint": "4.1.8",
     "chai": "^3.5.0",
     "eslint": "1.10.3",
