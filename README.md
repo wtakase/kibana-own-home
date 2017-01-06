@@ -29,6 +29,7 @@ And the proxy server intercepts ElasticSearch request in order to replace `kiban
 ## Usage
 
 * Install this plugin.
+* Set up front end web server.
 * Access your front end web server and log in.
 * Click `Own Home` tab on Kibana web interface.
 * Select one of tenants (kibana.index).
@@ -63,11 +64,7 @@ RequestHeader set X-Proxy-User %{REMOTE_USER}s
 * Kibana 5
 
 ```
-$ cd /path/to/kibana/plugins
-$ git clone https://github.com/wtakase/kibana-own-home.git own-home
-$ cd own-home
-$ git checkout v5.x.x
-$ npm install
+$ bin/kibana-plugin install https://github.com/wtakase/kibana-own-home/releases/download/v5.1.1/own_home-5.1.1.zip
 ```
 
 ## Options
