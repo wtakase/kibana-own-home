@@ -2,9 +2,11 @@ import chrome from 'ui/chrome';
 import uiModules from 'ui/modules';
 import uiRoutes from 'ui/routes';
 
-import 'ui/autoload/styles';
 import './less/main.less';
 import template from './templates/index.html';
+
+const context = require.context('ui/styles', false, /[\/\\](?!mixins|variables|_|\.)[^\/\\]+\.less/);
+context.keys().forEach(key => context(key));
 
 uiRoutes.enable();
 uiRoutes

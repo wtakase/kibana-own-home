@@ -1,5 +1,4 @@
 import upgrade from './upgrade_config';
-import { mappings } from '../../../../src/core_plugins/elasticsearch/lib/kibana_index_mappings';
 import createClient from './create_client';
 
 module.exports = function (server, index, ignore) {
@@ -14,7 +13,7 @@ module.exports = function (server, index, ignore) {
         {
           buildNum: {
             order: 'desc',
-            unmapped_type: mappings.config.properties.buildNum.type
+            ignore_unmapped: true
           }
         }
       ]

@@ -61,10 +61,10 @@ RequestHeader set X-Proxy-User %{REMOTE_USER}s
 
 ## Installation
 
-* Kibana 5
+* Kibana 4
 
 ```
-bin/kibana-plugin install https://github.com/wtakase/kibana-own-home/releases/download/v5.1.1/own_home-5.1.1.zip
+bin/kibana plugin -i own_home https://github.com/wtakase/kibana-own-home/releases/download/v4.6.3/own_home-4.6.3.zip
 ```
 
 ## Options
@@ -107,7 +107,6 @@ Assume the following situation:
 Set kibana.yml as follows:
 ```
 elasticsearch.url: http://localhost:19200
-elasticsearch.requestHeadersWhitelist: [ x-proxy-user, cookie ]
 own_home.session.secretkey: the-password-must-be-at-least-32-characters-long
 own_home.session.isSecure: false
 own_home.local.groups: [ common01, common02 ]
@@ -130,7 +129,6 @@ Set kibana.yml as follows:
 ```
 elasticsearch.url: https://localhost:19200
 elasticsearch.ssl.ca: /path/to/this/proxy/server/cert/CA.crt
-elasticsearch.requestHeadersWhitelist: [ remote-user, cookie ]
 own_home.proxy_user_header: remote-user
 own_home.ssl.cert: /path/to/this/proxy/server.crt
 own_home.ssl.key: /path/to/this/proxy/server.key
