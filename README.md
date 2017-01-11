@@ -35,7 +35,7 @@ And the proxy server intercepts ElasticSearch request in order to replace `kiban
 * Select one of tenants (kibana.index).
 * Go back to Discover, Visualize, Dashboard pages.
 
-![screenshot] (https://github.com/wtakase/kibana-own-home/raw/master/images/screenshot.png "screenshot")
+![screenshot] (https://github.com/wtakase/kibana-own-home/raw/4.6/images/screenshot.png "screenshot")
 
 ## Prerequirement
 
