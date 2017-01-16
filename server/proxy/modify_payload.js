@@ -46,6 +46,10 @@ export default function modifyPayload(server) {
                   doc['_index'] = replacedIndex;
                   replaced = true;
                   server.log(['plugin:own-home', 'debug'], 'Replace docs[' + i + '][\'_index\'] "' + config.get('kibana.index') + '" with "' + replacedIndex + '"');
+                  if (!('_id' in doc)) {
+                    doc['_id'] = '.kibana-devnull';
+                    server.log(['plugin:own-home', 'debug'], 'Missing docs[' + i + '][\'_id\']: Put .kibana-devnull');
+                  }
                 }
               }
               i++;

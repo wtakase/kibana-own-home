@@ -108,6 +108,17 @@ module.exports = function(kbnServer) {
               payload[kbnServer.config().get('kibana.index')] = payload[replacedIndex];
               delete payload[replacedIndex];
             }
+            if (replacedIndex && request.path.endsWith('_msearch') && payload['error']) {
+              // TODO(wtakase): Scan requested payload and count up number of searches
+              const searchNum = 32;
+              payload['responses'] = [];
+              payload['responses'].push({'error': payload['error'], 'status': payload['status']});
+              for (let i = 0; i < searchNum - 1; i++) {
+                payload['responses'].push({});
+              }
+              delete payload['error'];
+              delete payload['status'];
+            }
             reply(payload);
           });
         }
