@@ -20,7 +20,7 @@ module.exports = function (server, req, path) {
 
       // Check replaced kibana index exists
       const client = createClient(server);
-      client.indices.exists({ index: replacedIndex, ignoreUnavailable: false }).then(function (exists) {
+      client.indices.exists({ index: replacedIndex }).then(function (exists) {
         if (exists === true) {
           // Ignore 409 error: 'document_already_exists_exception'
           return migrateConfig(server, replacedIndex, [409]);
