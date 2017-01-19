@@ -1,5 +1,6 @@
 import SetupError from '../../../../src/plugins/elasticsearch/lib/setup_error';
 import { format } from 'util';
+import { mappings } from '../../../../src/plugins/elasticsearch/lib/kibana_index_mappings';
 import createClient from './create_client';
 
 module.exports = function (server, index) {
@@ -17,16 +18,7 @@ module.exports = function (server, index) {
       settings: {
         number_of_shards: 1
       },
-      mappings: {
-        config: {
-          properties: {
-            buildNum: {
-              type: 'string',
-              index: 'not_analyzed'
-            }
-          }
-        }
-      }
+      mappings
     }
   })
   .catch(handleError('Unable to create Kibana index "<%= kibana.index %>"'))
