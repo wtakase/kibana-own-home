@@ -25,18 +25,25 @@ module.exports = function (server, index, ignore) {
           // NOTE(wtakase): Set defaultIndex and objects only if defaultIndex has not been set yet.
           // TODO(wtakase): Even if this plugin set defaultIndex, Kibana says 'No default index pattern'.
           if (response.hits.hits.length === 0) {
-            try {
-              const obj = JSON.parse(fs.readFileSync(config.get('own_home.default_objects_json')));
-              let body = [];
-              for (let i = 0; i < obj.length; i++) {
-                body.push({ index: { _index: index, _type: obj[i]['_type'], _id: obj[i]['_id'] } });
-                body.push(obj[i]['_source']);
+            client.update({
+              index: index,
+              type: 'config',
+              id: config.get('pkg.version'),
+              body: { doc: { defaultIndex: config.get('own_home.default_index') } }
+            }).then(function () {
+              try {
+                const obj = JSON.parse(fs.readFileSync(config.get('own_home.default_objects_json')));
+                let body = [];
+                for (let i = 0; i < obj.length; i++) {
+                  body.push({ index: { _index: index, _type: obj[i]['_type'], _id: obj[i]['_id'] } });
+                  body.push(obj[i]['_source']);
+                }
+                server.log(['plugin:own-home', 'debug'], 'Import default objects from ' + config.get('own_home.default_objects_json'));
+                return client.bulk({ body: body, ignore: ignore || [] });
+              } catch (err) {
+                server.log(['plugin:own-home', 'error'], err);
               }
-              server.log(['plugin:own-home', 'debug'], 'Import default objects from ' + config.get('own_home.default_objects_json'));
-              return client.bulk({ body: body, ignore: ignore || [] });
-            } catch (err) {
-              server.log(['plugin:own-home', 'error'], err);
-            }
+            });
           }
         });
       }
