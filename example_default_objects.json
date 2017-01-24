@@ -1,0 +1,46 @@
+[
+  {
+    "_type" : "visualization",
+    "_id" : "example_visualization",
+    "_source" : {
+      "title" : "example_visualization",
+      "visState" : "{\"title\":\"New Visualization\",\"type\":\"metric\",\"params\":{\"handleNoResults\":true,\"fontSize\":60},\"aggs\":[{\"id\":\"1\",\"type\":\"count\",\"schema\":\"metric\",\"params\":{}}],\"listeners\":{}}",
+      "uiStateJSON" : "{}",
+      "description" : "",
+      "version" : 1,
+      "kibanaSavedObjectMeta" : {
+        "searchSourceJSON" : "{\"index\":\"logstash-*\",\"query\":{\"query_string\":{\"query\":\"*\",\"analyze_wildcard\":true}},\"filter\":[]}"
+      }
+    }
+  },
+  {
+    "_type" : "dashboard",
+    "_id" : "example_dashboard",
+    "_source" : {
+      "title" : "example_dashboard",
+      "description" : "",
+      "panelsJSON" : "[{\"id\":\"example_visualization\",\"type\":\"visualization\",\"panelIndex\":1,\"size_x\":3,\"size_y\":2,\"col\":1,\"row\":1}]",
+      "optionsJSON" : "{\"darkTheme\":false}",
+      "uiStateJSON" : "{}",
+      "version" : 1,
+      "timeRestore" : false,
+      "kibanaSavedObjectMeta" : {
+        "searchSourceJSON" : "{\"filter\":[{\"query\":{\"query_string\":{\"query\":\"*\",\"analyze_wildcard\":true}}}]}"
+      }
+    }
+  },
+  {
+    "_type" : "search",
+    "_id" : "example_search",
+    "_source" : {
+      "title" : "example_search",
+      "description" : "",
+      "columns" : [ "_source" ],
+      "sort" : [ "@timestamp", "desc" ],
+      "version" : 1,
+      "kibanaSavedObjectMeta" : {
+        "searchSourceJSON" : "{\"index\":\"logstash-*\",\"filter\":[],\"highlight\":{\"pre_tags\":[\"@kibana-highlighted-field@\"],\"post_tags\":[\"@/kibana-highlighted-field@\"],\"fields\":{\"*\":{}},\"require_field_match\":false,\"fragment_size\":2147483647},\"query\":{\"query_string\":{\"query\":\"*\",\"analyze_wildcard\":true}}}"
+      }
+    }
+  } 
+]

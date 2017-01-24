@@ -49,7 +49,9 @@ export default function (kibana) {
           username_attribute: string().default('cn'),
           rolename_attribute: string().default('cn'),
           adfs: boolean().default(false)
-        }).default()
+        }).default(),
+        default_index: string(),
+        default_objects_json: string()
       }).default();
     },
 

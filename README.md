@@ -89,6 +89,8 @@ own_home.ldap.search_filter: '(cn=*)'
 own_home.ldap.username_attribute: cn
 own_home.ldap.rolename_attribute: cn
 own_home.ldap.adfs: false
+own_home.default_index: '' <-- if this is set, default index will be set to newly created kibana.index.
+own_home.default_objects_json: '' <-- specify JSON formatted file path. if this is set, default objects will be added to newly created kibana.index.
 ```
 
 ## Examples of configuration
@@ -143,6 +145,14 @@ own_home.ldap.rolebase: ou=Groups,dc=localhost
 own_home.ldap.search_filter: '(cn=*)'
 own_home.ldap.username_attribute: cn
 own_home.ldap.rolename_attribute: cn
+```
+
+### Set default objects
+
+If you want to set default index and some objects to newly created kibana.index, add the following both options:
+```
+own_home.default_index: logstash-*
+own_home.default_objects_json: /path/to/own_home/example_default_objects.json
 ```
 
 ## Set default kibana.index by URL
