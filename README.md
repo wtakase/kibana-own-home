@@ -149,18 +149,18 @@ own_home.ldap.rolename_attribute: cn
 
 You can specify kibana.index in URL as follows:
 
-* kibanaserver:5601/app/own_home#/*KIBANA_INDEX_SUFFIX*
-* kibanaserver:5601/app/own_home#/*KIBANA_INDEX_SUFFIX*/*TAB*
-* kibanaserver:5601/app/own_home#/*KIBANA_INDEX_SUFFIX*/*TAB*/*OBJECT_NAME*
+* front_end_server/app/own_home#/*KIBANA_INDEX_SUFFIX*
+* front_end_server/app/own_home#/*KIBANA_INDEX_SUFFIX*/*TAB*
+* front_end_server/app/own_home#/*KIBANA_INDEX_SUFFIX*/*TAB*/*OBJECT_NAME*
 
 ### Example 1. Set `.kibana_public` as kibana.index
 
-Access to kibanaserver:5601/app/own_home#/`public`
+Access => front_end_server/app/own_home#/`public`
 
 ### Example 2. Set `.kibana_public` as kibana.index and then go to `dashboard` tab
 
-Access to kibanaserver:5601/app/own_home#/`public`/`dashboard`
+Access => front_end_server/app/own_home#/`public`/`dashboard`
 
 ### Example 3. Set `.kibana_public` as kibana.index and then open `example01` dashboard
 
-Access to kibanaserver:5601/app/own_home#/`public`/`dashboard`/`example01`
+Access => front_end_server/app/own_home#/`public`/`dashboard`/`example01`
