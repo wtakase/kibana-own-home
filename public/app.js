@@ -18,12 +18,12 @@ uiRoutes
           kibanaIndexPrefix: resp.data.kibanaIndexPrefix,
           username: resp.data.username,
           groups: resp.data.groups,
-          dashboard: null
+          moveTo: null
         };
       });
     }
   }
-}).when('/:suffix/:dashboard', {
+}).when('/:suffix/:tab', {
   template,
   resolve: {
     userInfo($route, $http) {
@@ -33,7 +33,28 @@ uiRoutes
           kibanaIndexPrefix: resp.data.kibanaIndexPrefix,
           username: resp.data.username,
           groups: resp.data.groups,
-          dashboard: $route.current.params.dashboard
+          moveTo: {
+            tab: $route.current.params.tab,
+            object: ''
+          }
+        };
+      });
+    }
+  }
+}).when('/:suffix/:tab/:object', {
+  template,
+  resolve: {
+    userInfo($route, $http) {
+      return $http.get('../api/own_home/selection/' + $route.current.params.suffix).then(function (resp) {
+        return {
+          currentKibanaIndex: resp.data.currentKibanaIndex,
+          kibanaIndexPrefix: resp.data.kibanaIndexPrefix,
+          username: resp.data.username,
+          groups: resp.data.groups,
+          moveTo: {
+            tab: $route.current.params.tab,
+            object: $route.current.params.object
+          }
         };
       });
     }
@@ -48,7 +69,7 @@ uiRoutes
           kibanaIndexPrefix: resp.data.kibanaIndexPrefix,
           username: resp.data.username,
           groups: resp.data.groups,
-          dashboard: null
+          moveTo: null
         };
       });
     }
@@ -67,9 +88,9 @@ uiModules
   $scope.kibanaIndexPrefix = userInfo.kibanaIndexPrefix;
   $scope.username = userInfo.username;
   $scope.groups = userInfo.groups;
-  if (userInfo.dashboard) {
-    $location.url('/');
-    $route.reload();
-    window.location.replace('/app/kibana#/dashboard/' + userInfo.dashboard);
+  $location.path('').replace();
+  if (userInfo.moveTo && ['discover', 'visualize', 'dashboard'].indexOf(userInfo.moveTo.tab) > -1) {
+    window.location = './own_home';
+    window.location.replace('./kibana#/' + userInfo.moveTo.tab + '/' + userInfo.moveTo.object);
   }
 });
