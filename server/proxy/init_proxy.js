@@ -8,6 +8,7 @@ import createAgent from './create_agent';
 import mapUri from './map_uri';
 import getKibanaIndexName from './get_kibana_index_name';
 import modifyPayload from './modify_payload';
+import initKibanaProxy from './init_kibana_proxy';
 
 module.exports = function(kbnServer) {
 
@@ -163,4 +164,7 @@ module.exports = function(kbnServer) {
     }
   });
 
+  if (kbnServer.config().get('own_home.explicit_kibana_index_url.enabled')) {
+    initKibanaProxy(kbnServer, yarOptions);
+  }
 };

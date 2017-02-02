@@ -72,8 +72,8 @@ bin/kibana plugin -i own_home -u https://github.com/wtakase/kibana-own-home/rele
 Available optins and default values are as follows:
 ```
 own_home.proxy_user_header: x-proxy-user
-own_home.ssl.cert: '' <-- specify this proxy's server cert location if necessary
-own_home.ssl.key: '' <-- specify this proxy's server key location if necessary
+own_home.ssl.cert: '' <-- specify this elasticsearch proxy's server cert location if necessary
+own_home.ssl.key: '' <-- specify this elasticsearch proxy's server key location if necessary
 own_home.elasticsearch.url: http://localhost:9200
 own_home.elasticsearch.ssl.ca: '' <-- specify your elasticsearch cert's CA cert location if necessary
 own_home.session.secretkey: the-password-must-be-at-least-32-characters-long
@@ -89,6 +89,12 @@ own_home.ldap.search_filter: '(cn=*)'
 own_home.ldap.username_attribute: cn
 own_home.ldap.rolename_attribute: cn
 own_home.ldap.adfs: false
+own_home.explicit_kibana_index_url.enabled: false
+own_home.explicit_kibana_index_url.proxy.url: http://localhost:15601
+own_home.explicit_kibana_index_url.proxy.ssl.cert: '' <-- specify this kibana proxy's server cert location if necessary
+own_home.explicit_kibana_index_url.proxy.ssl.key: '' <-- specify this kibana proxy's server cert location if necessary
+own_home.explicit_kibana_index_url.kibana.ssl.verify: true
+own_home.explicit_kibana_index_url.kibana.ssl.ca: '' <-- specify your kibana cert's CA cert location if necessary
 ```
 
 ## Examples of configuration
@@ -144,6 +150,33 @@ own_home.ldap.search_filter: '(cn=*)'
 own_home.ldap.username_attribute: cn
 own_home.ldap.rolename_attribute: cn
 ```
+
+### Use explicit kibana.index in URL feature (Experimental)
+
+This enables to display current kibana.index in URL, so that it is possible users to know it explicitly.
+
+Configure your httpd as follows:
+```
+RewriteEngine on
+RewriteRule  ^/?(.*)$ http://localhost:15601/$1 [L,P]
+RequestHeader set X-Proxy-User %{REMOTE_USER}e
+<Location />
+  AuthType Basic
+  AuthName "Basic Authentication"
+  AuthUserFile /path/to/htpasswd
+  Require valid-user
+</Location>
+```
+
+Add the following line to kibana.yml:
+```
+own_home.explicit_kibana_index_url.enabled: true
+```
+
+#### Example: Work on `.kibana_public`:
+Access => http://frontendserver/public/app/kibana
+
+![explicit_kibana_index_url] (https://github.com/wtakase/kibana-own-home/raw/explicit-kibana-index-url/images/explicit_kibana_index_url.gif "explicit_kibana_index_url")
 
 ## Set default kibana.index by URL
 

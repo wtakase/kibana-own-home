@@ -90,6 +90,7 @@ uiModules
   $scope.kibanaIndexPrefix = userInfo.kibanaIndexPrefix;
   $scope.username = userInfo.username;
   $scope.groups = userInfo.groups;
+  $scope.kibanaIndexSuffix = userInfo.currentKibanaIndex.slice(userInfo.kibanaIndexPrefix.length + 1);
   $location.path('').replace();
   if (userInfo.moveTo && ['discover', 'visualize', 'dashboard'].indexOf(userInfo.moveTo.tab) > -1) {
     window.location = './own_home';
