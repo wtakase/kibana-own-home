@@ -7,7 +7,7 @@ import https from 'https';
 module.exports = _.memoize(function (server) {
   const config = server.config();
 
-  const target = server.info.uri;
+  const target = url.parse(server.info.uri);
 
   if (!/^https/.test(target.protocol)) return new http.Agent();
 
