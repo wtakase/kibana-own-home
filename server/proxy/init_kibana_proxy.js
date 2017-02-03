@@ -59,7 +59,16 @@ module.exports = function(kbnServer, yarOptions) {
 
   server.route({
     method: ['GET', 'POST', 'PUT', 'DELETE'],
-    path: '/{paths*}',
+    path: '/{suffix?}',
+    handler: function (request, reply) {
+      const suffix = request.params.suffix ? '/' + encodeURIComponent(request.params.suffix) : '';
+      reply().redirect(suffix + '/app/kibana');
+    }
+  });
+
+  server.route({
+    method: ['GET', 'POST', 'PUT', 'DELETE'],
+    path: '/{suffix}/{paths*}',
     config: {
       timeout: {
         socket: kbnServer.config().get('elasticsearch.requestTimeout')
@@ -88,7 +97,7 @@ module.exports = function(kbnServer, yarOptions) {
                   const suffix = replacedIndex.slice(kbnServer.config().get('kibana.index').length + 1);
                   const modifiedPayload = originalPayload.replace('return scope.href', 'return scope.href.replace("app/kibana", "' + suffix + '/app/kibana")');
                   if (modifiedPayload !== originalPayload) {
-                    kbnServer.log(['plugin:own-home', 'info'], 'Replace the string in commons.bundle.js: "app/kibana" => "' + suffix + '/app/kibana"');
+                    kbnServer.log(['plugin:own-home', 'debug'], 'Replace the string in commons.bundle.js: "app/kibana" => "' + suffix + '/app/kibana"');
                   } else {
                     kbnServer.log(['plugin:own-home', 'warning'], 'Failed to replace the string in commons.bundle.js: "app/kibana" => "' + suffix + '/app/kibana"');
                   }
@@ -98,6 +107,7 @@ module.exports = function(kbnServer, yarOptions) {
                   reply(response);
                 }
               } else {
+                kbnServer.log(['plugin:own-home', 'debug'], 'Replacement skipped because the target file has already been chached.');
                 reply(response);
               }
             });
