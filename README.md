@@ -64,7 +64,7 @@ RequestHeader set X-Proxy-User %{REMOTE_USER}s
 * Kibana 5
 
 ```
-bin/kibana-plugin install https://github.com/wtakase/kibana-own-home/releases/download/v5.1.2/own_home-5.1.2.zip
+bin/kibana-plugin install https://github.com/wtakase/kibana-own-home/releases/download/v5.2.0/own_home-5.2.0.zip
 ```
 
 ## Options
@@ -153,7 +153,7 @@ You can specify kibana.index in URL as follows:
 
 * front_end_server/app/own_home#/*KIBANA_INDEX_SUFFIX*
 * front_end_server/app/own_home#/*KIBANA_INDEX_SUFFIX*/*TAB*
-* front_end_server/app/own_home#/*KIBANA_INDEX_SUFFIX*/*TAB*/*OBJECT_NAME*
+* front_end_server/app/own_home#/*KIBANA_INDEX_SUFFIX*/*TAB*/*OBJECT_ID*
 
 ### Example 1. Set `.kibana_public` as kibana.index
 
@@ -163,6 +163,6 @@ Access => front_end_server/app/own_home#/`public`
 
 Access => front_end_server/app/own_home#/`public`/`dashboard`
 
-### Example 3. Set `.kibana_public` as kibana.index and then open `example01` dashboard
+### Example 3. Set `.kibana_public` as kibana.index and then open `xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx` dashboard
 
-Access => front_end_server/app/own_home#/`public`/`dashboard`/`example01`
+Access => front_end_server/app/own_home#/`public`/`dashboard`/`xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx`
