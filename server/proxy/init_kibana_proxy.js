@@ -116,7 +116,7 @@ module.exports = function(kbnServer, yarOptions) {
                 const replacedIndex = getKibanaIndexName(kbnServer, request);
                 if (replacedIndex) {
                   const suffix = replacedIndex.slice(kbnServer.config().get('kibana.index').length + 1);
-                  const modifiedPayload = originalPayload.replace(/scope.href/g, 'scope.href.replace("app/kibana", "' + suffix + '/app/kibana")');
+                  const modifiedPayload = originalPayload.replace(/this.baseUrl,/g, 'this.baseUrl.replace("app/kibana", "' + suffix + '/app/kibana"),');
                   if (modifiedPayload !== originalPayload) {
                     kbnServer.log(['plugin:own-home', 'debug'], 'Replace the string in commons.bundle.js: "app/kibana" => "' + suffix + '/app/kibana"');
                   } else {
