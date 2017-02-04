@@ -1,7 +1,6 @@
 import { readFileSync } from 'fs';
 import { format as formatUrl } from 'url';
 import httpolyglot from 'httpolyglot';
-import tlsCiphers from '../../../../src/server/http/tls_ciphers';
 import url from 'url';
 import Hapi from 'hapi';
 import Wreck from 'wreck';
@@ -31,7 +30,29 @@ module.exports = function(kbnServer, yarOptions) {
         key: readFileSync(kbnServer.config().get('own_home.explicit_kibana_index_url.proxy.ssl.key')),
         cert: readFileSync(kbnServer.config().get('own_home.explicit_kibana_index_url.proxy.ssl.cert')),
 
-        ciphers: tlsCiphers,
+        ciphers: [
+          'ECDHE-RSA-AES128-GCM-SHA256',
+          'ECDHE-ECDSA-AES128-GCM-SHA256',
+          'ECDHE-RSA-AES256-GCM-SHA384',
+          'ECDHE-ECDSA-AES256-GCM-SHA384',
+          'DHE-RSA-AES128-GCM-SHA256',
+          'ECDHE-RSA-AES128-SHA256',
+          'DHE-RSA-AES128-SHA256',
+          'ECDHE-RSA-AES256-SHA384',
+          'DHE-RSA-AES256-SHA384',
+          'ECDHE-RSA-AES256-SHA256',
+          'DHE-RSA-AES256-SHA256',
+          'HIGH',
+          '!aNULL',
+          '!eNULL',
+          '!EXPORT',
+          '!DES',
+          '!RC4',
+          '!MD5',
+          '!PSK',
+          '!SRP',
+          '!CAMELLIA'
+        ].join(':'),
         // We use the server's cipher order rather than the client's to prevent the BEAST attack
         honorCipherOrder: true
       })
