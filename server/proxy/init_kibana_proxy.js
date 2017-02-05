@@ -4,13 +4,11 @@ import httpolyglot from 'httpolyglot';
 import url from 'url';
 import Hapi from 'hapi';
 import Wreck from 'wreck';
-import createAgent from './create_agent';
-import mapUri from './map_uri';
+import createAgent from './create_kibana_agent';
+import mapUri from './kibana_map_uri';
 import getKibanaIndexName from './get_kibana_index_name';
-import modifyPayload from './modify_payload';
-import initKibanaProxy from './init_kibana_proxy';
 
-module.exports = function(kbnServer) {
+module.exports = function(kbnServer, yarOptions) {
 
   const server = new Hapi.Server();
 
@@ -22,15 +20,15 @@ module.exports = function(kbnServer) {
     }
   });
 
-  const uri = url.parse(kbnServer.config().get('elasticsearch.url'));
+  const uri = url.parse(kbnServer.config().get('own_home.explicit_kibana_index_url.proxy.url'));
   if (uri.protocol == 'https:') {
     server.connection({
       host: uri.hostname,
       port: uri.port,
       tls: true,
       listener: httpolyglot.createServer({
-        key: readFileSync(kbnServer.config().get('own_home.ssl.key')),
-        cert: readFileSync(kbnServer.config().get('own_home.ssl.cert')),
+        key: readFileSync(kbnServer.config().get('own_home.explicit_kibana_index_url.proxy.ssl.key')),
+        cert: readFileSync(kbnServer.config().get('own_home.explicit_kibana_index_url.proxy.ssl.cert')),
 
         ciphers: [
           'ECDHE-RSA-AES128-GCM-SHA256',
@@ -82,7 +80,16 @@ module.exports = function(kbnServer) {
 
   server.route({
     method: ['GET', 'POST', 'PUT', 'DELETE'],
-    path: '/{paths*}',
+    path: '/{suffix?}',
+    handler: function (request, reply) {
+      const suffix = request.params.suffix ? '/' + encodeURIComponent(request.params.suffix) : '';
+      reply().redirect(suffix + '/app/kibana');
+    }
+  });
+
+  server.route({
+    method: ['GET', 'POST', 'PUT', 'DELETE'],
+    path: '/{suffix}/{paths*}',
     config: {
       timeout: {
         socket: kbnServer.config().get('elasticsearch.requestTimeout')
@@ -94,34 +101,40 @@ module.exports = function(kbnServer) {
         agent: createAgent(kbnServer),
         xforward: true,
         passThrough: true,
+        acceptEncoding: false,
         timeout: kbnServer.config().get('elasticsearch.requestTimeout'),
-        modifyPayload: modifyPayload(kbnServer),
         onResponse: function (err, response, request, reply) {
           if (err) {
             reply(err);
             return;
           }
 
-          // Back kibana.index to original one in responce body
-          Wreck.read(response, { json: true }, function (err, payload) {
-            let replacedIndex = getKibanaIndexName(kbnServer, request);
-            if (replacedIndex && payload[replacedIndex]) {
-              payload[kbnServer.config().get('kibana.index')] = payload[replacedIndex];
-              delete payload[replacedIndex];
-            }
-            if (replacedIndex && request.path.endsWith('_msearch') && payload['error']) {
-              // TODO(wtakase): Scan requested payload and count up number of searches
-              const searchNum = 32;
-              payload['responses'] = [];
-              payload['responses'].push({'error': payload['error'], 'status': payload['status']});
-              for (let i = 0; i < searchNum - 1; i++) {
-                payload['responses'].push({});
+          if (request.path.endsWith('/bundles/commons.bundle.js')) {
+            Wreck.read(response, null, function (err, payload) {
+              const originalPayload = payload.toString();
+              if (originalPayload.length > 0) {
+                const replacedIndex = getKibanaIndexName(kbnServer, request);
+                if (replacedIndex) {
+                  const suffix = replacedIndex.slice(kbnServer.config().get('kibana.index').length + 1);
+                  const modifiedPayload = originalPayload.replace(/this.baseUrl,/g, 'this.baseUrl.replace("app/kibana", "' + suffix + '/app/kibana"),');
+                  if (modifiedPayload !== originalPayload) {
+                    kbnServer.log(['plugin:own-home', 'debug'], 'Replace the string in commons.bundle.js: "app/kibana" => "' + suffix + '/app/kibana"');
+                  } else {
+                    kbnServer.log(['plugin:own-home', 'warning'], 'Failed to replace the string in commons.bundle.js: "app/kibana" => "' + suffix + '/app/kibana"');
+                  }
+                  response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate';
+                  reply(modifiedPayload).headers = response.headers;
+                } else {
+                  reply(response);
+                }
+              } else {
+                kbnServer.log(['plugin:own-home', 'debug'], 'Replacement skipped because the target file has already been chached.');
+                reply(response);
               }
-              delete payload['error'];
-              delete payload['status'];
-            }
-            reply(payload);
-          });
+            });
+          } else {
+            reply(response);
+          }
         }
       }
     }
@@ -134,27 +147,6 @@ module.exports = function(kbnServer) {
     kbnServer.log(['plugin:own-home', 'info'], 'Proxy server started at ' + server.info.uri);
   });
 
-  const yarOptions = {
-    name: 'own-home-session',
-    cache: {
-      expiresIn: kbnServer.config().get('own_home.session.timeout')
-    },
-    cookieOptions: {
-      password: kbnServer.config().get('own_home.session.secretkey'),
-      isSecure: kbnServer.config().get('own_home.session.isSecure'),
-      passThrough: true
-    }
-  };
-
-  kbnServer.register({
-    register: require('yar'),
-    options: yarOptions
-  }, function (err) {
-    if (err) {
-      kbnServer.log(['plugin:own-home', 'error'], 'Unknown error occured at the init()');
-    }
-  });
-
   server.register({
     register: require('yar'),
     options: yarOptions
@@ -163,8 +155,4 @@ module.exports = function(kbnServer) {
       kbnServer.log(['plugin:own-home', 'error'], 'Unknown error occured at the init()');
     }
   });
-
-  if (kbnServer.config().get('own_home.explicit_kibana_index_url.enabled')) {
-    initKibanaProxy(kbnServer, yarOptions);
-  }
 };

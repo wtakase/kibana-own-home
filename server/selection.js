@@ -25,7 +25,9 @@ export default function (server) {
           currentKibanaIndex: config.get('kibana.index'),
           kibanaIndexPrefix: '',
           username: '',
-          groups: []
+          groups: [],
+          explicitMode: 'false',
+          backHref: './kibana'
         });
       }
     }
