@@ -31,10 +31,10 @@ export default function (server, request, remoteUser, kibanaIndexSuffix, reply) 
         if (groups[i] == kibanaIndexSuffix) {
           server.log(['plugin:own-home', 'debug'], 'kibanaIndexSuffix matches LDAP group: ' + kibanaIndexSuffix);
           setKibanaIndex(server, request, remoteUser, kibanaIndexSuffix);
-          return fetchGroups(server, request, remoteUser, reply);
+          return (reply === null) ? true : fetchGroups(server, request, remoteUser, reply);
         }
       }
-      return fetchGroups(server, request, remoteUser, reply);
+      return (reply === null) ? false : fetchGroups(server, request, remoteUser, reply);
     });
   });
 };
