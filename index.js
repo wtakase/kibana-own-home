@@ -49,6 +49,22 @@ export default function (kibana) {
           username_attribute: string().default('cn'),
           rolename_attribute: string().default('cn'),
           adfs: boolean().default(false)
+        }).default(),
+        explicit_kibana_index_url: object({
+          enabled: Joi.boolean().default(false),
+          proxy: object({
+            url: string().default('http://localhost:15601'),
+            ssl: object({
+              cert: string(),
+              key: string()
+            }).default()
+          }).default(),
+          kibana: object({
+            ssl: object({
+              verify: Joi.boolean().default(true),
+              ca: string()
+            }).default()
+          }).default()
         }).default()
       }).default();
     },

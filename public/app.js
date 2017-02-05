@@ -18,7 +18,9 @@ uiRoutes
           kibanaIndexPrefix: resp.data.kibanaIndexPrefix,
           username: resp.data.username,
           groups: resp.data.groups,
-          moveTo: null
+          moveTo: null,
+          reload: resp.data.explicitMode == 'true' ? true : false,
+          backHref: resp.data.backHref
         };
       });
     }
@@ -36,7 +38,9 @@ uiRoutes
           moveTo: {
             tab: $route.current.params.tab,
             object: ''
-          }
+          },
+          reload: false,
+          backHref: resp.data.backHref
         };
       });
     }
@@ -54,7 +58,9 @@ uiRoutes
           moveTo: {
             tab: $route.current.params.tab,
             object: $route.current.params.object
-          }
+          },
+          reload: false,
+          backHref: resp.data.backHref
         };
       });
     }
@@ -69,7 +75,9 @@ uiRoutes
           kibanaIndexPrefix: resp.data.kibanaIndexPrefix,
           username: resp.data.username,
           groups: resp.data.groups,
-          moveTo: null
+          moveTo: null,
+          reload: false,
+          backHref: resp.data.backHref
         };
       });
     }
@@ -88,9 +96,13 @@ uiModules
   $scope.kibanaIndexPrefix = userInfo.kibanaIndexPrefix;
   $scope.username = userInfo.username;
   $scope.groups = userInfo.groups;
+  $scope.backHref = userInfo.backHref;
   $location.path('').replace();
   if (userInfo.moveTo && ['discover', 'visualize', 'dashboard'].indexOf(userInfo.moveTo.tab) > -1) {
     window.location = './own_home';
     window.location.replace('./kibana#/' + userInfo.moveTo.tab + '/' + userInfo.moveTo.object);
+  }
+  if (userInfo.reload) {
+    window.location.replace('./own_home');
   }
 });
