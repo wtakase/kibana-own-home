@@ -19,7 +19,8 @@ uiRoutes
           username: resp.data.username,
           groups: resp.data.groups,
           moveTo: null,
-          reload: true
+          reload: resp.data.explicitMode == 'true' ? true : false,
+          backHref: resp.data.backHref
         };
       });
     }
@@ -38,7 +39,8 @@ uiRoutes
             tab: $route.current.params.tab,
             object: ''
           },
-          reload: false
+          reload: false,
+          backHref: resp.data.backHref
         };
       });
     }
@@ -57,7 +59,8 @@ uiRoutes
             tab: $route.current.params.tab,
             object: $route.current.params.object
           },
-          reload: false
+          reload: false,
+          backHref: resp.data.backHref
         };
       });
     }
@@ -73,7 +76,8 @@ uiRoutes
           username: resp.data.username,
           groups: resp.data.groups,
           moveTo: null,
-          reload: false
+          reload: false,
+          backHref: resp.data.backHref
         };
       });
     }
@@ -92,7 +96,7 @@ uiModules
   $scope.kibanaIndexPrefix = userInfo.kibanaIndexPrefix;
   $scope.username = userInfo.username;
   $scope.groups = userInfo.groups;
-  $scope.kibanaIndexSuffix = userInfo.currentKibanaIndex.slice(userInfo.kibanaIndexPrefix.length + 1);
+  $scope.backHref = userInfo.backHref;
   $location.path('').replace();
   if (userInfo.moveTo && ['discover', 'visualize', 'dashboard'].indexOf(userInfo.moveTo.tab) > -1) {
     window.location = './own_home';
