@@ -11,7 +11,6 @@ import getKibanaIndexName from './get_kibana_index_name';
 import modifyPayload from './modify_payload';
 import initKibanaProxy from './init_kibana_proxy';
 import Boom from 'boom';
-import initKibanaProxy from './init_kibana_proxy';
 
 module.exports = function(kbnServer) {
 
