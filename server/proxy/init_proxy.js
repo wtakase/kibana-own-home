@@ -9,6 +9,7 @@ import createAgent from './create_agent';
 import mapUri from './map_uri';
 import getKibanaIndexName from './get_kibana_index_name';
 import modifyPayload from './modify_payload';
+import Boom from 'boom';
 
 module.exports = function(kbnServer) {
 
@@ -86,6 +87,15 @@ module.exports = function(kbnServer) {
             if (replacedIndex && payload[replacedIndex]) {
               payload[kbnServer.config().get('kibana.index')] = payload[replacedIndex];
               delete payload[replacedIndex];
+            }
+            if (replacedIndex && payload['error']) {
+              if (payload['status'] === 409) {
+                reply(Boom.conflict('plugin:own-home: document_already_exists_exception'));
+                return;
+              } else {
+                reply(Boom.badRequest('plugin:own-home: unhandled error'));
+                return;
+              }
             }
             reply(payload);
           });
