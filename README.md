@@ -64,7 +64,7 @@ RequestHeader set X-Proxy-User %{REMOTE_USER}s
 * Kibana 5
 
 ```
-bin/kibana-plugin install https://github.com/wtakase/kibana-own-home/releases/download/v5.1.2/own_home-5.1.2.zip
+bin/kibana-plugin install https://github.com/wtakase/kibana-own-home/releases/download/v5.1.2-2/own_home-5.1.2-2.zip
 ```
 
 ## Options
@@ -178,7 +178,7 @@ own_home.explicit_kibana_index_url.enabled: true
 #### Example: Work on `.kibana_public`:
 Access => http://frontendserver/public/app/kibana
 
-![explicit_kibana_index_url] (https://github.com/wtakase/kibana-own-home/raw/explicit-kibana-index-url/images/explicit_kibana_index_url.gif "explicit_kibana_index_url")
+![explicit_kibana_index_url] (https://github.com/wtakase/kibana-own-home/raw/master/images/explicit_kibana_index_url.gif "explicit_kibana_index_url")
 
 ## Set default kibana.index by URL
 
