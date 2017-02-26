@@ -93,9 +93,6 @@ module.exports = function(kbnServer) {
               if (payload['status'] === 409) {
                 reply(Boom.conflict('plugin:own-home: document_already_exists_exception'));
                 return;
-              } else {
-                reply(Boom.badRequest('plugin:own-home: unhandled error'));
-                return;
               }
             }
             reply(payload);
