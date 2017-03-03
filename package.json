@@ -1,10 +1,10 @@
 {
   "name": "own_home",
-  "version": "5.2.1",
+  "version": "5.2.2",
   "description": "This plugin adds multi-tenancy feature to Kibana. A user can have own personal kibana.index so that objects the user created are stored in the index. And also group shared kibana.index can be provided. A user can switch kibana.index depending on the situation by selecting on the plugin interface. kibana.index list will be generated based on username, local group definition in kibana.yml, and LDAP roles.",
   "main": "index.js",
   "kibana": {
-    "version": "5.2.1"
+    "version": "5.2.2"
   },
   "scripts": {
     "lint": "eslint",
