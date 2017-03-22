@@ -5,7 +5,7 @@ Adds multi-tenancy feature to Kibana.
 
 Each user has own `kibana.index`.
 
-![objects separation] (https://github.com/wtakase/kibana-own-home/raw/master/images/objects_separation.png "objects separation")
+![objects separation](https://github.com/wtakase/kibana-own-home/raw/master/images/objects_separation.png "objects separation")
 
 This plugin enables a user to have own personal `kibana.index` so that objects the user created are stored to separate location from others. And also group shared `kibana.index` can be provided. A user can switch `kibana.index` depending on the situation by selecting on the plugin interface. Available `kibana.index` list will be generated based on username, local group definition in kibana.yml, and LDAP roles.
 
@@ -15,7 +15,7 @@ In the case of single Kibana instance shared among many users/groups, all object
 
 ## How it works
 
-![overview] (https://github.com/wtakase/kibana-own-home/raw/master/images/overview.png "overview")
+![overview](https://github.com/wtakase/kibana-own-home/raw/master/images/overview.png "overview")
 
 This plugin starts up a proxy server with port 19200 on the same host of Kibana.
 And the proxy server intercepts ElasticSearch request in order to replace `kibana.index` with specified one.
@@ -35,7 +35,7 @@ And the proxy server intercepts ElasticSearch request in order to replace `kiban
 * Select one of tenants (kibana.index).
 * Go back to Discover, Visualize, Dashboard pages.
 
-![screenshot] (https://github.com/wtakase/kibana-own-home/raw/4.6/images/screenshot.png "screenshot")
+![screenshot](https://github.com/wtakase/kibana-own-home/raw/4.6/images/screenshot.png "screenshot")
 
 ## Prerequirement
 
@@ -176,7 +176,7 @@ own_home.explicit_kibana_index_url.enabled: true
 #### Example: Work on `.kibana_public`:
 Access => http://frontendserver/public/app/kibana
 
-![explicit_kibana_index_url] (https://github.com/wtakase/kibana-own-home/raw/master/images/explicit_kibana_index_url.gif "explicit_kibana_index_url")
+![explicit_kibana_index_url](https://github.com/wtakase/kibana-own-home/raw/master/images/explicit_kibana_index_url.gif "explicit_kibana_index_url")
 
 ## Set default kibana.index by URL
 
