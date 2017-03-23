@@ -82,17 +82,27 @@ module.exports = function(kbnServer) {
             return;
           }
 
-          // Back kibana.index to original one in responce body
           Wreck.read(response, { json: true }, function (err, payload) {
-            let replacedIndex = getKibanaIndexName(kbnServer, request);
-            if (replacedIndex && payload[replacedIndex]) {
-              payload[kbnServer.config().get('kibana.index')] = payload[replacedIndex];
-              delete payload[replacedIndex];
-            }
-            if (replacedIndex && payload['error']) {
-              if (payload['status'] === 409) {
-                reply(Boom.conflict('plugin:own-home: document_already_exists_exception'));
-                return;
+            const replacedIndex = getKibanaIndexName(kbnServer, request);
+            if (replacedIndex) {
+              // Workaround for creating shortened url
+              if (request.path.startsWith('/' + kbnServer.config().get('kibana.index') + '/url/')) {
+                if (payload['found'] === false) {
+                  reply();
+                  return;
+                }
+              }
+              // Workaround for overwritting Kibana object
+              if (payload['error']) {
+                if (payload['status'] === 409) {
+                  reply(Boom.conflict('plugin:own-home: document_already_exists_exception'));
+                  return;
+                }
+              }
+              // Back kibana.index to original one in responce body
+              if (payload[replacedIndex]) {
+                payload[kbnServer.config().get('kibana.index')] = payload[replacedIndex];
+                delete payload[replacedIndex];
               }
             }
             reply(payload);
