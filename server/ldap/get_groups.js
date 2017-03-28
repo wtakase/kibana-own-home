@@ -1,13 +1,12 @@
+import generateReply from '../generate_reply';
 import getLdapConfig from './get_ldap_config';
 
-export default function (server, request, remoteUser) {
+export default function (server, request, remoteUser, groups, callback) {
   const ldapConfig = getLdapConfig(server, remoteUser);
-  let groups = [];
 
   ldapConfig.client.search(ldapConfig.rolebase, ldapConfig.options, function (error, response) {
     if (error != undefined) {
       server.log(['plugin:own-home', 'error'], 'LDAP search error: ' + error);
-      return [];
     }
 
     response.on('searchEntry', function(entry) {
@@ -19,13 +18,12 @@ export default function (server, request, remoteUser) {
 
     response.on('error', function(error) {
       server.log(['plugin:own-home', 'error'], 'LDAP search error: ' + error.message);
-      return [];
     });
 
     response.on('end', function(result) {
       server.log(['plugin:own-home', 'debug'], 'LDAP search status: ' + result.status);
       server.log(['plugin:own-home', 'debug'], 'Found groups: ' + groups.toString());
-      return groups;
+      callback(generateReply(server, request, remoteUser, groups));
     });
   });
 };

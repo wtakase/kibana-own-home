@@ -1,6 +1,8 @@
+import getGroups from '../get_groups';
 import getLdapConfig from './get_ldap_config';
+import setKibanaIndex from '../set_kibana_index';
 
-export default function (server, request, remoteUser, kibanaIndexSuffix) {
+export default function (server, request, remoteUser, kibanaIndexSuffix, callback) {
 
   const ldapConfig = getLdapConfig(server, remoteUser);
   let groups = [];
@@ -8,7 +10,6 @@ export default function (server, request, remoteUser, kibanaIndexSuffix) {
   ldapConfig.client.search(ldapConfig.rolebase, ldapConfig.options, function (error, response) {
     if (error != undefined) {
       server.log(['plugin:own-home', 'error'], 'LDAP search error: ' + error);
-      return false;
     }
 
     response.on('searchEntry', function(entry) {
@@ -20,7 +21,6 @@ export default function (server, request, remoteUser, kibanaIndexSuffix) {
 
     response.on('error', function(error) {
       server.log(['plugin:own-home', 'error'], 'LDAP search error: ' + error.message);
-      return false;
     });
 
     response.on('end', function(result) {
@@ -28,10 +28,12 @@ export default function (server, request, remoteUser, kibanaIndexSuffix) {
       server.log(['plugin:own-home', 'debug'], 'Found LDAP groups: ' + groups.toString());
       for (let i = 0; i < groups.length; i++) {
         if (groups[i] == kibanaIndexSuffix) {
-          return true;
+          server.log(['plugin:own-home', 'debug'], 'kibanaIndexSuffix matches LDAP group: ' + kibanaIndexSuffix);
+          setKibanaIndex(server, request, remoteUser, kibanaIndexSuffix);
+          return (callback === null) ? true : getGroups(server, request, remoteUser, callback);
         }
       }
-      return false;
+      return (callback === null) ? false : getGroups(server, request, remoteUser, callback);
     });
   });
 };
