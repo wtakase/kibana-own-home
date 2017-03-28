@@ -1,6 +1,6 @@
 import { defaults, omit, trimRight, trimLeft } from 'lodash';
 import { parse as parseUrl, format as formatUrl, resolve } from 'url';
-import replaceKibanaIndex from './replace_kibana_index';
+import replaceKibanaIndex from './replace_kibana_index_in_path';
 
 export default function mapUri(server) {
   const config = server.config();
@@ -30,7 +30,7 @@ export default function mapUri(server) {
     };
 
     // pathname
-    let path = replaceKibanaIndex(server, request, request.path);
+    const path = replaceKibanaIndex(server, request, request.path);
     mappedUrlComponents.pathname = joinPaths(esUrlBasePath, path);
 
     // querystring

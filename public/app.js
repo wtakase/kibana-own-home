@@ -6,6 +6,18 @@ import 'ui/autoload/styles';
 import './less/main.less';
 import template from './templates/index.html';
 
+function generateUserInfo(resp, tab, object) {
+  return {
+    currentKibanaIndex: resp.data.currentKibanaIndex,
+    kibanaIndexPrefix: resp.data.kibanaIndexPrefix,
+    username: resp.data.username,
+    groups: resp.data.groups,
+    moveTo: tab ? {tab: tab, object: object || ''} : null,
+    reload: resp.data.explicitMode == 'true' ? true : false,
+    backHref: resp.data.backHref
+  }
+}
+
 uiRoutes.enable();
 uiRoutes
 .when('/:suffix', {
@@ -13,15 +25,7 @@ uiRoutes
   resolve: {
     userInfo($route, $http) {
       return $http.get('../api/own_home/selection/' + $route.current.params.suffix).then(function (resp) {
-        return {
-          currentKibanaIndex: resp.data.currentKibanaIndex,
-          kibanaIndexPrefix: resp.data.kibanaIndexPrefix,
-          username: resp.data.username,
-          groups: resp.data.groups,
-          moveTo: null,
-          reload: resp.data.explicitMode == 'true' ? true : false,
-          backHref: resp.data.backHref
-        };
+        return generateUserInfo(resp);
       });
     }
   }
@@ -30,18 +34,7 @@ uiRoutes
   resolve: {
     userInfo($route, $http) {
       return $http.get('../api/own_home/selection/' + $route.current.params.suffix).then(function (resp) {
-        return {
-          currentKibanaIndex: resp.data.currentKibanaIndex,
-          kibanaIndexPrefix: resp.data.kibanaIndexPrefix,
-          username: resp.data.username,
-          groups: resp.data.groups,
-          moveTo: {
-            tab: $route.current.params.tab,
-            object: ''
-          },
-          reload: false,
-          backHref: resp.data.backHref
-        };
+        return generateUserInfo(resp, $route.current.params.tab);
       });
     }
   }
@@ -50,18 +43,7 @@ uiRoutes
   resolve: {
     userInfo($route, $http) {
       return $http.get('../api/own_home/selection/' + $route.current.params.suffix).then(function (resp) {
-        return {
-          currentKibanaIndex: resp.data.currentKibanaIndex,
-          kibanaIndexPrefix: resp.data.kibanaIndexPrefix,
-          username: resp.data.username,
-          groups: resp.data.groups,
-          moveTo: {
-            tab: $route.current.params.tab,
-            object: $route.current.params.object
-          },
-          reload: false,
-          backHref: resp.data.backHref
-        };
+        return generateUserInfo(resp, $route.current.params.tab, $route.current.params.object);
       });
     }
   }
@@ -70,15 +52,7 @@ uiRoutes
   resolve: {
     userInfo($route, $http) {
       return $http.get('../api/own_home/selection').then(function (resp) {
-        return {
-          currentKibanaIndex: resp.data.currentKibanaIndex,
-          kibanaIndexPrefix: resp.data.kibanaIndexPrefix,
-          username: resp.data.username,
-          groups: resp.data.groups,
-          moveTo: null,
-          reload: false,
-          backHref: resp.data.backHref
-        };
+        return generateUserInfo(resp);
       });
     }
   }
@@ -87,11 +61,7 @@ uiRoutes
 uiModules
 .get('app/own_home', [])
 .controller('ownHome', function ($scope, $route, $location) {
-  $scope.title = 'Multi-tenancy for Kibana';
-  $scope.message = 'Select tenant (kibana.index)';
-  $scope.description1 = 'You can switch a tenant (kibana.index) for personal or group use.';
-  $scope.description2 = 'Created objects are saved to the selected index.';
-  let userInfo = $route.current.locals.userInfo;
+  const userInfo = $route.current.locals.userInfo;
   $scope.currentKibanaIndex = userInfo.currentKibanaIndex;
   $scope.kibanaIndexPrefix = userInfo.kibanaIndexPrefix;
   $scope.username = userInfo.username;

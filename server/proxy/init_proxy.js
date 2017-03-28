@@ -7,9 +7,9 @@ import Hapi from 'hapi';
 import Wreck from 'wreck';
 import createAgent from './create_agent';
 import mapUri from './map_uri';
-import getKibanaIndexName from './get_kibana_index_name';
+import getReplacedIndex from './get_replaced_index';
 import modifyPayload from './modify_payload';
-import initKibanaProxy from './init_kibana_proxy';
+import initExplicitProxy from './explicit/init_proxy';
 import Boom from 'boom';
 
 module.exports = function(kbnServer) {
@@ -83,8 +83,8 @@ module.exports = function(kbnServer) {
           }
 
           Wreck.read(response, { json: true }, function (err, payload) {
-            const replacedIndex = getKibanaIndexName(kbnServer, request);
-            if (replacedIndex) {
+            const replacedIndex = getReplacedIndex(kbnServer, request);
+            if (replacedIndex && payload) {
               // Workaround for creating shortened url
               if (request.path.startsWith('/' + kbnServer.config().get('kibana.index') + '/url/')) {
                 if (payload['found'] === false) {
@@ -150,6 +150,6 @@ module.exports = function(kbnServer) {
   });
 
   if (kbnServer.config().get('own_home.explicit_kibana_index_url.enabled')) {
-    initKibanaProxy(kbnServer, yarOptions);
+    initExplicitProxy(kbnServer, yarOptions);
   }
 };

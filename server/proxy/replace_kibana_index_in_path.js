@@ -1,13 +1,13 @@
 import createKibanaIndex from './create_kibana_index';
 import migrateConfig from './migrate_config';
-import getKibanaIndexName from './get_kibana_index_name';
+import getReplacedIndex from './get_replaced_index';
 import createClient from './create_client';
 
 module.exports = function (server, req, path) {
 
   const config = server.config();
 
-  const replacedIndex = getKibanaIndexName(server, req);
+  const replacedIndex = getReplacedIndex(server, req);
 
   if (replacedIndex) {
     const originalIndex = config.get('kibana.index');

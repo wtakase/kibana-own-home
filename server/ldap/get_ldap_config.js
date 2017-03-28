@@ -26,6 +26,8 @@ export default function (server, remoteUser) {
   const rolebase = config.get(configPrefix + 'rolebase');
   const rolenameAttribute = config.get(configPrefix + 'rolename_attribute');
 
+  // TODO(wtakase): Add bind here
+ 
   return {
     client: client,
     options: options,

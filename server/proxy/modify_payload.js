@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import getKibanaIndexName from './get_kibana_index_name';
+import getReplacedIndex from './get_replaced_index';
 
 export default function modifyPayload(server) {
   const config = server.config();
@@ -40,7 +40,7 @@ export default function modifyPayload(server) {
           let i = 0;
           data['docs'] = _.map(data['docs'], function (doc) {
             if ('_index' in doc && doc['_index'] == config.get('kibana.index')) {
-              const replacedIndex = getKibanaIndexName(server, request);
+              const replacedIndex = getReplacedIndex(server, request);
               if (replacedIndex) {
                 doc['_index'] = replacedIndex;
                 replaced = true;

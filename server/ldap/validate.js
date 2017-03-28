@@ -1,13 +1,14 @@
 import getLdapConfig from './get_ldap_config';
-import generateReply from './generate_reply';
 
-export default function (server, request, remoteUser, reply, groups) {
+export default function (server, request, remoteUser, kibanaIndexSuffix) {
+
   const ldapConfig = getLdapConfig(server, remoteUser);
+  let groups = [];
 
   ldapConfig.client.search(ldapConfig.rolebase, ldapConfig.options, function (error, response) {
     if (error != undefined) {
       server.log(['plugin:own-home', 'error'], 'LDAP search error: ' + error);
-      return {};
+      return false;
     }
 
     response.on('searchEntry', function(entry) {
@@ -19,12 +20,18 @@ export default function (server, request, remoteUser, reply, groups) {
 
     response.on('error', function(error) {
       server.log(['plugin:own-home', 'error'], 'LDAP search error: ' + error.message);
+      return false;
     });
 
     response.on('end', function(result) {
       server.log(['plugin:own-home', 'debug'], 'LDAP search status: ' + result.status);
-      server.log(['plugin:own-home', 'debug'], 'Found groups: ' + groups.toString());
-      reply(generateReply(server, request, remoteUser, groups));
+      server.log(['plugin:own-home', 'debug'], 'Found LDAP groups: ' + groups.toString());
+      for (let i = 0; i < groups.length; i++) {
+        if (groups[i] == kibanaIndexSuffix) {
+          return true;
+        }
+      }
+      return false;
     });
   });
 };

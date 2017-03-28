@@ -1,13 +1,13 @@
 import { readFileSync } from 'fs';
 import { format as formatUrl } from 'url';
 import httpolyglot from 'httpolyglot';
-import tlsCiphers from '../../../../src/server/http/tls_ciphers';
+import tlsCiphers from '../../../../../src/server/http/tls_ciphers';
 import url from 'url';
 import Hapi from 'hapi';
 import Wreck from 'wreck';
-import createAgent from './create_kibana_agent';
-import mapUri from './kibana_map_uri';
-import getKibanaIndexName from './get_kibana_index_name';
+import createAgent from './create_agent';
+import mapUri from './map_uri';
+import getReplacedIndex from '../get_replaced_index';
 
 module.exports = function(kbnServer, yarOptions) {
 
@@ -92,7 +92,7 @@ module.exports = function(kbnServer, yarOptions) {
             Wreck.read(response, null, function (err, payload) {
               const originalPayload = payload.toString();
               if (originalPayload.length > 0) {
-                const replacedIndex = getKibanaIndexName(kbnServer, request);
+                const replacedIndex = getReplacedIndex(kbnServer, request);
                 if (replacedIndex) {
                   const suffix = replacedIndex.slice(kbnServer.config().get('kibana.index').length + 1);
                   const modifiedPayload = originalPayload.replace(/scope.href(:|;)/g, 'scope.href.replace("app/kibana", "' + suffix + '/app/kibana")' + "$1");
