@@ -7,9 +7,14 @@ export default function (server, request, remoteUser, kibanaIndexSuffix, callbac
   const ldapConfig = getLdapConfig(server, remoteUser);
   let groups = [];
 
+  if (ldapConfig === null) {
+    return (callback === null) ? false : getGroups(server, request, remoteUser, callback);
+  }
+
   ldapConfig.client.search(ldapConfig.rolebase, ldapConfig.options, function (error, response) {
     if (error != undefined) {
       server.log(['plugin:own-home', 'error'], 'LDAP search error: ' + error);
+      return (callback === null) ? false : getGroups(server, request, remoteUser, callback);
     }
 
     response.on('searchEntry', function(entry) {
@@ -21,6 +26,7 @@ export default function (server, request, remoteUser, kibanaIndexSuffix, callbac
 
     response.on('error', function(error) {
       server.log(['plugin:own-home', 'error'], 'LDAP search error: ' + error.message);
+      return (callback === null) ? false : getGroups(server, request, remoteUser, callback);
     });
 
     response.on('end', function(result) {

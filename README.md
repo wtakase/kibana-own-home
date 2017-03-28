@@ -89,6 +89,8 @@ own_home.ldap.search_filter: '(cn=*)'
 own_home.ldap.username_attribute: cn
 own_home.ldap.rolename_attribute: cn
 own_home.ldap.adfs: false
+own_home.ldap.bind.dn: ''
+own_home.ldap.bind.password: ''
 own_home.explicit_kibana_index_url.enabled: false
 own_home.explicit_kibana_index_url.proxy.url: http://localhost:15601
 own_home.explicit_kibana_index_url.proxy.ssl.cert: '' <-- specify this kibana proxy's server cert location if necessary

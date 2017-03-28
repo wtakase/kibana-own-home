@@ -48,7 +48,11 @@ export default function (kibana) {
           search_filter: string().default('(cn=*)'),
           username_attribute: string().default('cn'),
           rolename_attribute: string().default('cn'),
-          adfs: boolean().default(false)
+          adfs: boolean().default(false),
+          bind: object({
+            dn: string(),
+            password: string()
+          }).default()
         }).default(),
         explicit_kibana_index_url: object({
           enabled: Joi.boolean().default(false),

@@ -26,7 +26,14 @@ export default function (server, remoteUser) {
   const rolebase = config.get(configPrefix + 'rolebase');
   const rolenameAttribute = config.get(configPrefix + 'rolename_attribute');
 
-  // TODO(wtakase): Add bind here
+  if (config.get(configPrefix + 'bind.dn') && config.get(configPrefix + 'bind.password')) {
+    client.bind(config.get(configPrefix + 'bind.dn'), config.get(configPrefix + 'bind.password'), function(err) {
+      if (err) {
+        server.log(['plugin:own-home', 'error'], 'LDAP bind error: ' + err);
+        return null;
+      }
+    });
+  }
  
   return {
     client: client,
