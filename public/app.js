@@ -6,14 +6,14 @@ import 'ui/autoload/styles';
 import './less/main.less';
 import template from './templates/index.html';
 
-function generateUserInfo(resp, tab, object) {
+function generateUserInfo(resp, tab, object, reload) {
   return {
     currentKibanaIndex: resp.data.currentKibanaIndex,
     kibanaIndexPrefix: resp.data.kibanaIndexPrefix,
     username: resp.data.username,
     groups: resp.data.groups,
     moveTo: tab ? {tab: tab, object: object || ''} : null,
-    reload: resp.data.explicitMode == 'true' ? true : false,
+    reload: reload,
     backHref: resp.data.backHref
   }
 }
@@ -25,7 +25,7 @@ uiRoutes
   resolve: {
     userInfo($route, $http) {
       return $http.get('../api/own_home/selection/' + $route.current.params.suffix).then(function (resp) {
-        return generateUserInfo(resp);
+        return generateUserInfo(resp, null, null, resp.data.explicitMode == 'true' ? true : false);
       });
     }
   }
@@ -34,7 +34,7 @@ uiRoutes
   resolve: {
     userInfo($route, $http) {
       return $http.get('../api/own_home/selection/' + $route.current.params.suffix).then(function (resp) {
-        return generateUserInfo(resp, $route.current.params.tab);
+        return generateUserInfo(resp, $route.current.params.tab, null, false);
       });
     }
   }
@@ -43,7 +43,7 @@ uiRoutes
   resolve: {
     userInfo($route, $http) {
       return $http.get('../api/own_home/selection/' + $route.current.params.suffix).then(function (resp) {
-        return generateUserInfo(resp, $route.current.params.tab, $route.current.params.object);
+        return generateUserInfo(resp, $route.current.params.tab, $route.current.params.object, false);
       });
     }
   }
@@ -52,7 +52,7 @@ uiRoutes
   resolve: {
     userInfo($route, $http) {
       return $http.get('../api/own_home/selection').then(function (resp) {
-        return generateUserInfo(resp);
+        return generateUserInfo(resp, null, null, false);
       });
     }
   }
