@@ -21,6 +21,10 @@ export default function (kibana) {
       return object({
         enabled: boolean().default(true),
         proxy_user_header: string().default('x-proxy-user'),
+        get_username_from_session: object({
+          enabled: boolean().default(false),
+          key: string().default('username')
+        }).default(),
         ssl: object({
           certificate: string(),
           key: string()

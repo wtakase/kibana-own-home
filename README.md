@@ -72,6 +72,8 @@ bin/kibana-plugin install https://github.com/wtakase/kibana-own-home/releases/do
 Available optins and default values are as follows:
 ```
 own_home.proxy_user_header: x-proxy-user
+own_home.get_username_from_session.enabled: false
+own_home.get_username_from_session.key: username
 own_home.ssl.certificate: '' <-- specify this elasticsearch proxy's server cert location if necessary
 own_home.ssl.key: '' <-- specify this elasticsearch proxy's server key location if necessary
 own_home.elasticsearch.url: http://localhost:9200
