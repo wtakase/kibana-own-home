@@ -22,7 +22,7 @@ export default function (kibana) {
         enabled: boolean().default(true),
         proxy_user_header: string().default('x-proxy-user'),
         ssl: object({
-          cert: string(),
+          certificate: string(),
           key: string()
         }).default(),
         elasticsearch: object({
