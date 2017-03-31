@@ -11,16 +11,16 @@ module.exports = _.memoize(function (server) {
   if (!/^https/.test(target.protocol)) return new http.Agent();
 
   const agentOptions = {
-    rejectUnauthorized: config.get('elasticsearch.ssl.verify')
+    rejectUnauthorized: config.get('elasticsearch.ssl.verificationMode')
   };
 
-  if (_.size(config.get('own_home.elasticsearch.ssl.ca'))) {
-    agentOptions.ca = config.get('own_home.elasticsearch.ssl.ca').map(readFile);
+  if (_.size(config.get('own_home.elasticsearch.ssl.certificateAuthorities'))) {
+    agentOptions.ca = config.get('own_home.elasticsearch.ssl.certificateAuthorities').map(readFile);
   }
 
   // Add client certificate and key if required by elasticsearch
-  if (config.get('elasticsearch.ssl.cert') && config.get('elasticsearch.ssl.key')) {
-    agentOptions.cert = readFile(config.get('elasticsearch.ssl.cert'));
+  if (config.get('elasticsearch.ssl.certificate') && config.get('elasticsearch.ssl.key')) {
+    agentOptions.cert = readFile(config.get('elasticsearch.ssl.certificate'));
     agentOptions.key = readFile(config.get('elasticsearch.ssl.key'));
   }
 

@@ -1,7 +1,6 @@
 import { readFileSync } from 'fs';
 import { format as formatUrl } from 'url';
 import httpolyglot from 'httpolyglot';
-import tlsCiphers from '../../../../../src/server/http/tls_ciphers';
 import url from 'url';
 import Hapi from 'hapi';
 import Wreck from 'wreck';
@@ -29,9 +28,9 @@ module.exports = function(kbnServer, yarOptions) {
       tls: true,
       listener: httpolyglot.createServer({
         key: readFileSync(kbnServer.config().get('own_home.explicit_kibana_index_url.proxy.ssl.key')),
-        cert: readFileSync(kbnServer.config().get('own_home.explicit_kibana_index_url.proxy.ssl.cert')),
+        cert: readFileSync(kbnServer.config().get('own_home.explicit_kibana_index_url.proxy.ssl.certificate')),
 
-        ciphers: tlsCiphers,
+        ciphers: kbnServer.config().get('server.ssl.cipherSuites').join(':'),
         // We use the server's cipher order rather than the client's to prevent the BEAST attack
         honorCipherOrder: true
       })

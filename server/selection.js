@@ -12,7 +12,7 @@ export default function (server) {
     path: '/api/own_home/selection/{suffix?}',
     method: 'GET',
     handler(request, reply) {
-      const remoteUser = getRemoteUser(config, request);
+      const remoteUser = getRemoteUser(server, request);
       if (remoteUser) {
         const currentKibanaIndex = getKibanaIndex(server, request, remoteUser);
         const kibanaIndexPrefix = config.get('kibana.index');

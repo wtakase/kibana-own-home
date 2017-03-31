@@ -64,7 +64,7 @@ RequestHeader set X-Proxy-User %{REMOTE_USER}s
 * Kibana 5
 
 ```
-bin/kibana-plugin install https://github.com/wtakase/kibana-own-home/releases/download/v5.2.2-1/own_home-5.2.2-1.zip
+bin/kibana-plugin install https://github.com/wtakase/kibana-own-home/releases/download/v5.3.0/own_home-5.3.0.zip
 ```
 
 ## Options
@@ -72,10 +72,10 @@ bin/kibana-plugin install https://github.com/wtakase/kibana-own-home/releases/do
 Available optins and default values are as follows:
 ```
 own_home.proxy_user_header: x-proxy-user
-own_home.ssl.cert: '' <-- specify this elasticsearch proxy's server cert location if necessary
+own_home.ssl.certificate: '' <-- specify this elasticsearch proxy's server cert location if necessary
 own_home.ssl.key: '' <-- specify this elasticsearch proxy's server key location if necessary
 own_home.elasticsearch.url: http://localhost:9200
-own_home.elasticsearch.ssl.ca: '' <-- specify your elasticsearch cert's CA cert location if necessary
+own_home.elasticsearch.ssl.certificateAuthorities: '' <-- specify your elasticsearch cert's CA cert location if necessary
 own_home.session.secretkey: the-password-must-be-at-least-32-characters-long
 own_home.session.isSecure: true
 own_home.session.timeout: 3600000
@@ -93,10 +93,10 @@ own_home.ldap.bind.dn: ''
 own_home.ldap.bind.password: ''
 own_home.explicit_kibana_index_url.enabled: false
 own_home.explicit_kibana_index_url.proxy.url: http://localhost:15601
-own_home.explicit_kibana_index_url.proxy.ssl.cert: '' <-- specify this kibana proxy's server cert location if necessary
+own_home.explicit_kibana_index_url.proxy.ssl.certificate: '' <-- specify this kibana proxy's server cert location if necessary
 own_home.explicit_kibana_index_url.proxy.ssl.key: '' <-- specify this kibana proxy's server cert location if necessary
-own_home.explicit_kibana_index_url.kibana.ssl.verify: true
-own_home.explicit_kibana_index_url.kibana.ssl.ca: '' <-- specify your kibana cert's CA cert location if necessary
+own_home.explicit_kibana_index_url.kibana.ssl.verificationMode: true
+own_home.explicit_kibana_index_url.kibana.ssl.certificateAuthorities: '' <-- specify your kibana cert's CA cert location if necessary
 ```
 
 ## Examples of configuration
@@ -137,13 +137,13 @@ Assume the following situation:
 Set kibana.yml as follows:
 ```
 elasticsearch.url: https://localhost:19200
-elasticsearch.ssl.ca: /path/to/this/proxy/server/cert/CA.crt
+elasticsearch.ssl.certificateAuthorities: /path/to/this/proxy/server/cert/CA.crt
 elasticsearch.requestHeadersWhitelist: [ remote-user, cookie ]
 own_home.proxy_user_header: remote-user
-own_home.ssl.cert: /path/to/this/proxy/server.crt
+own_home.ssl.certificate: /path/to/this/proxy/server.crt
 own_home.ssl.key: /path/to/this/proxy/server.key
 own_home.elasticsearch.url: https://localhost:9200
-own_home.elasticsearch.ssl.ca: /path/to/elasticsearch/server/cert/CA.crt
+own_home.elasticsearch.ssl.certificateAuthorities: /path/to/elasticsearch/server/cert/CA.crt
 own_home.session.secretkey: the-password-must-be-at-least-32-characters-long
 own_home.local.groups: [ public, sandbox ]
 own_home.ldap.enabled: true

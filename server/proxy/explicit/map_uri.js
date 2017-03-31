@@ -1,6 +1,7 @@
 import { defaults, omit, trimRight, trimLeft, pull } from 'lodash';
 import { parse as parseUrl, format as formatUrl, resolve } from 'url';
 import getSuffixFromPath from './get_suffix_from_path';
+import getRemoteUser from '../../get_remote_user';
 import validate from '../../validate';
 
 export default function mapUri(server) {
@@ -32,10 +33,7 @@ export default function mapUri(server) {
 
     // pathname
     const suffix = getSuffixFromPath(request.path);
-    let remoteUser = null;
-    if (config.get('own_home.proxy_user_header') in request.headers) {
-      remoteUser = request.headers[config.get('own_home.proxy_user_header')];
-    }
+    const remoteUser = getRemoteUser(server, request);
     if (suffix !== null && remoteUser !== null) {
       validate(server, request, remoteUser, suffix, null);
       mappedUrlComponents.pathname = joinPaths(kibanaUrlBasePath, request.path.split('/').slice(2).join('/'));

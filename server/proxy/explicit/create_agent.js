@@ -12,11 +12,11 @@ module.exports = _.memoize(function (server) {
   if (!/^https/.test(target.protocol)) return new http.Agent();
 
   const agentOptions = {
-    rejectUnauthorized: config.get('own_home.explicit_kibana_index_url.kibana.ssl.verify')
+    rejectUnauthorized: config.get('own_home.explicit_kibana_index_url.kibana.ssl.verificationMode')
   };
 
-  if (_.size(config.get('own_home.explicit_kibana_index_url.kibana.ssl.ca'))) {
-    agentOptions.ca = config.get('own_home.explicit_kibana_index_url.kibana.ssl.ca').map(readFile);
+  if (_.size(config.get('own_home.explicit_kibana_index_url.kibana.ssl.certificateAuthorities'))) {
+    agentOptions.ca = config.get('own_home.explicit_kibana_index_url.kibana.ssl.certificateAuthorities').map(readFile);
   }
 
   return new https.Agent(agentOptions);

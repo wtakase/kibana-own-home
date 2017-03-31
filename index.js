@@ -28,7 +28,7 @@ export default function (kibana) {
         elasticsearch: object({
           url: string().default('http://localhost:9200'),
           ssl: object({
-            ca: array().single().items(string())
+            certificateAuthorities: array().single().items(string())
           }).default()
         }).default(),
         session: object({
@@ -59,14 +59,14 @@ export default function (kibana) {
           proxy: object({
             url: string().default('http://localhost:15601'),
             ssl: object({
-              cert: string(),
+              certificate: string(),
               key: string()
             }).default()
           }).default(),
           kibana: object({
             ssl: object({
-              verify: Joi.boolean().default(true),
-              ca: string()
+              verificationMode: Joi.boolean().default(true),
+              certificateAuthorities: string()
             }).default()
           }).default()
         }).default()
