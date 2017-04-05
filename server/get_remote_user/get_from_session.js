@@ -1,5 +1,3 @@
-import getKibanaIndex from '../get_kibana_index';
-
 export default function (server, request) {
   const sessionKey = server.config().get('own_home.get_username_from_session.key');
   const yarKey = 'remote_user';
