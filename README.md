@@ -72,6 +72,8 @@ bin/kibana-plugin install https://github.com/wtakase/kibana-own-home/releases/do
 Available optins and default values are as follows:
 ```
 own_home.proxy_user_header: x-proxy-user
+own_home.get_username_from_session.enabled: false
+own_home.get_username_from_session.key: username
 own_home.ssl.certificate: '' <-- specify this elasticsearch proxy's server cert location if necessary
 own_home.ssl.key: '' <-- specify this elasticsearch proxy's server key location if necessary
 own_home.elasticsearch.url: http://localhost:9200
@@ -153,6 +155,28 @@ own_home.ldap.rolebase: ou=Groups,dc=localhost
 own_home.ldap.search_filter: '(cn=*)'
 own_home.ldap.username_attribute: cn
 own_home.ldap.rolename_attribute: cn
+```
+
+## Extract username from session instead of request header (Experimental)
+
+By default, Own home fetches username from HTTP request header such as `x-proxy-user`.
+`get_username_from_session.enabled` and `get_username_from_session.key` options enable to fetch from session.
+
+Here is an example of integration with [search-guard-kibana-plugin](https://github.com/floragunncom/search-guard-kibana-plugin):
+```
+server.defaultRoute: /app/own_home
+elasticsearch.url: http://localhost:19200
+elasticsearch.requestHeadersWhitelist: [ cookie, authorization ]
+elasticsearch.username: kibanaserver
+elasticsearch.password: kibanaserver
+elasticsearch.ssl.verify: false
+own_home.get_username_from_session.enabled: true
+own_home.get_username_from_session.key: username
+own_home.session.isSecure: false
+own_home.elasticsearch.url: http://localhost:9200
+own_home.session.secretkey: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+searchguard.cookie.secure: false
+searchguard.cookie.password: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 ```
 
 ### Use explicit kibana.index in URL feature (Experimental)
