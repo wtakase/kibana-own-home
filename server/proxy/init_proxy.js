@@ -82,6 +82,12 @@ module.exports = function(kbnServer) {
           }
 
           Wreck.read(response, { json: true }, function (err, payload) {
+            if (kbnServer.config().get('own_home.get_username_from_session.enabled')) {
+              if (payload && payload.toString() == 'Unauthorized') {
+                reply(Boom.unauthorized('plugin:own-home: unauthorized'));
+                return;
+              }
+            }
             const replacedIndex = getReplacedIndex(kbnServer, request);
             if (replacedIndex && payload) {
               // Workaround for creating shortened url

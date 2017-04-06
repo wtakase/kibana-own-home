@@ -22,7 +22,7 @@ And the proxy server intercepts ElasticSearch request in order to replace `kiban
 
  * Kibana runs behind of a reverse proxy web server such httpd/nginx.
  * User is required authentication at the web server.
- * The web server sets authenticated username to `x-proxy-user` header and proxies the user's request to Kibana with the header.
+ * The web server sets authenticated username to `x-proxy-user` header and passes the user's request to Kibana with the header.
  * On the Kibana plugin interface, a user can set `kibana.index` and it is saved to session.
  * All requests to ElasticSearch are intercepted by this plugin, and `kibana.index` is replaced based on session information.
 
@@ -41,7 +41,7 @@ And the proxy server intercepts ElasticSearch request in order to replace `kiban
 
 * A reverse proxy server such as httpd, nginx is required as a front end of Kibana.
 * Authentication is required at the server.
-* After the authentication the server proxies user's requests to Kibana with `x-proxy-user` header which contains username.
+* After the authentication the server passes user's requests to Kibana with `x-proxy-user` header which contains username.
 
 ### Example of httpd configuration with Basic authentication
 
@@ -64,7 +64,7 @@ RequestHeader set X-Proxy-User %{REMOTE_USER}s
 * Kibana 5
 
 ```
-bin/kibana-plugin install https://github.com/wtakase/kibana-own-home/releases/download/v5.3.0-1/own_home-5.3.0-1.zip
+bin/kibana-plugin install https://github.com/wtakase/kibana-own-home/releases/download/v5.3.0-2/own_home-5.3.0-2.zip
 ```
 
 ## Options
@@ -157,10 +157,13 @@ own_home.ldap.username_attribute: cn
 own_home.ldap.rolename_attribute: cn
 ```
 
-## Extract username from session instead of request header (Experimental)
+### Extract username from session instead of request header (Experimental)
 
 By default, Own home fetches username from HTTP request header such as `x-proxy-user`.
 `get_username_from_session.enabled` and `get_username_from_session.key` options enable to fetch from session.
+In this case, you don't need to set up a front end server.
+
+![extract_username_from_session](https://github.com/wtakase/kibana-own-home/raw/master/images/extract_username_from_session.png "extract_username_from_session")
 
 Here is an example of integration with [search-guard-kibana-plugin](https://github.com/floragunncom/search-guard-kibana-plugin):
 ```
@@ -178,6 +181,8 @@ own_home.session.secretkey: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 searchguard.cookie.secure: false
 searchguard.cookie.password: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 ```
+
+![demo_extract_username_from_session](https://github.com/wtakase/kibana-own-home/raw/master/images/demo_extract_username_from_session.gif "demo_extract_username_from_session")
 
 ### Use explicit kibana.index in URL feature (Experimental)
 
@@ -214,14 +219,14 @@ You can specify kibana.index in URL as follows:
 * front_end_server/app/own_home#/*KIBANA_INDEX_SUFFIX*/*TAB*
 * front_end_server/app/own_home#/*KIBANA_INDEX_SUFFIX*/*TAB*/*OBJECT_ID*
 
-### Example 1. Set `.kibana_public` as kibana.index
+### Example 1. Set .kibana_public as kibana.index
 
 Access => front_end_server/app/own_home#/`public`
 
-### Example 2. Set `.kibana_public` as kibana.index and then go to `dashboard` tab
+### Example 2. Set .kibana_public as kibana.index and then go to dashboard tab
 
 Access => front_end_server/app/own_home#/`public`/`dashboard`
 
-### Example 3. Set `.kibana_public` as kibana.index and then open `xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx` dashboard
+### Example 3. Set .kibana_public as kibana.index and then open xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx dashboard
 
 Access => front_end_server/app/own_home#/`public`/`dashboard`/`xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx`
