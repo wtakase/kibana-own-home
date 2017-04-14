@@ -25,6 +25,7 @@ export default function (kibana) {
           enabled: boolean().default(false),
           key: string().default('username')
         }).default(),
+        default_kibana_index_suffix: string(),
         ssl: object({
           certificate: string(),
           key: string()
