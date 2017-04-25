@@ -33,7 +33,7 @@ module.exports = function(kbnServer) {
         key: readFileSync(kbnServer.config().get('own_home.ssl.key')),
         cert: readFileSync(kbnServer.config().get('own_home.ssl.certificate')),
 
-        ciphers: KbnServer.config().get('server.ssl.cipherSuites').join(':'),
+        ciphers: kbnServer.config().get('server.ssl.cipherSuites').join(':'),
         // We use the server's cipher order rather than the client's to prevent the BEAST attack
         honorCipherOrder: true
       })
