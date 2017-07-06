@@ -69,7 +69,7 @@ bin/kibana-plugin install https://github.com/wtakase/kibana-own-home/releases/do
 
 ## Options
 
-Available optins and default values are as follows:
+Available options and default values are as follows:
 ```
 own_home.proxy_user_header: x-proxy-user
 own_home.get_username_from_session.enabled: false
