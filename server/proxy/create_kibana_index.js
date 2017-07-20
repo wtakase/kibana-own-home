@@ -1,9 +1,8 @@
 import SetupError from '../../../../src/core_plugins/elasticsearch/lib/setup_error';
 import { format } from 'util';
-import { mappings } from '../../../../src/core_plugins/elasticsearch/lib/kibana_index_mappings';
 import createClient from './create_client';
 
-module.exports = function (server, index) {
+module.exports = function (server, index, mappings) {
   const client = createClient(server);
 
   function handleError(message) {

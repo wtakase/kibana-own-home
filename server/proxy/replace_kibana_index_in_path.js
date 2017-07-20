@@ -3,7 +3,7 @@ import migrateConfig from './migrate_config';
 import getReplacedIndex from './get_replaced_index';
 import createClient from './create_client';
 
-module.exports = function (server, req, path) {
+module.exports = function (server, req, path, mappings) {
 
   const config = server.config();
 
@@ -23,9 +23,9 @@ module.exports = function (server, req, path) {
       client.indices.exists({ index: replacedIndex }).then(function (exists) {
         if (exists === true) {
           // Ignore 409 error: 'document_already_exists_exception'
-          return migrateConfig(server, replacedIndex, [409]);
+          return migrateConfig(server, replacedIndex, [409], mappings);
         } else {
-          return createKibanaIndex(server, replacedIndex);
+          return createKibanaIndex(server, replacedIndex, mappings);
         }
       });
     }

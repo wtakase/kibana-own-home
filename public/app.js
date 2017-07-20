@@ -1,5 +1,4 @@
 import chrome from 'ui/chrome';
-import uiModules from 'ui/modules';
 import uiRoutes from 'ui/routes';
 
 import 'ui/autoload/styles';
@@ -58,7 +57,7 @@ uiRoutes
   }
 });
 
-uiModules
+require('ui/modules')
 .get('app/own_home', [])
 .controller('ownHome', function ($scope, $route, $location) {
   const userInfo = $route.current.locals.userInfo;

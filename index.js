@@ -80,7 +80,8 @@ export default function (kibana) {
 
     init(server, options) {
       if (server.config().get('own_home.enabled')) {
-        initProxy(server);
+        const mappings = kibana.uiExports.mappings.getCombined();
+        initProxy(server, mappings);
         selectionRoute(server);
       }
     }

@@ -11,7 +11,7 @@ import modifyPayload from './modify_payload';
 import initExplicitProxy from './explicit/init_proxy';
 import Boom from 'boom';
 
-module.exports = function(kbnServer) {
+module.exports = function(kbnServer, mappings) {
 
   const server = new Hapi.Server();
 
@@ -69,7 +69,7 @@ module.exports = function(kbnServer) {
     },
     handler: {
       kibi_proxy: {
-        mapUri: mapUri(kbnServer),
+        mapUri: mapUri(kbnServer, mappings),
         agent: createAgent(kbnServer),
         xforward: true,
         passThrough: true,
@@ -97,10 +97,16 @@ module.exports = function(kbnServer) {
                   return;
                 }
               }
-              // Workaround for overwritting Kibana object
               if (payload['error']) {
+                // Workaround for overwritting Kibana object
                 if (payload['status'] === 409) {
                   reply(Boom.conflict('plugin:own-home: document_already_exists_exception'));
+                  return;
+                }
+
+                // Workaround for no matching indices message
+                if (request.path.endsWith('_field_caps') && payload['status'] === 404 && payload['error']['type'] === 'index_not_found_exception') {
+                  reply({fields: {}});
                   return;
                 }
               }

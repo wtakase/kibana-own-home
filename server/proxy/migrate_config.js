@@ -1,8 +1,7 @@
 import upgrade from './upgrade_config';
-import { mappings } from '../../../../src/core_plugins/elasticsearch/lib/kibana_index_mappings';
 import createClient from './create_client';
 
-module.exports = function (server, index, ignore) {
+module.exports = function (server, index, ignore, mappings) {
   const config = server.config();
   const client = createClient(server);
   const options =  {
