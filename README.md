@@ -92,6 +92,8 @@ own_home.ldap.search_filter: '(cn=*)'
 own_home.ldap.username_attribute: cn
 own_home.ldap.rolename_attribute: cn
 own_home.ldap.adfs: false
+own_home.ldap.member_attribute: member <-- member or memberUid or uniquemember
+own_home.ldap.get_dn_by_uid: false <-- if true, get the user's DN dynamically by using uid (username)
 own_home.ldap.bind.dn: ''
 own_home.ldap.bind.password: ''
 own_home.explicit_kibana_index_url.enabled: false

@@ -54,6 +54,8 @@ export default function (kibana) {
           username_attribute: string().default('cn'),
           rolename_attribute: string().default('cn'),
           adfs: boolean().default(false),
+          member_attribute: string().valid('member', 'memberUid', 'uniquemember').default('member'),
+          get_dn_by_uid: boolean().default(false),
           bind: object({
             dn: string(),
             password: string()

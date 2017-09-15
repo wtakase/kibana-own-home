@@ -12,9 +12,27 @@ export default function (server, remoteUser) {
     const rolenameAttribute = config.get(configPrefix + 'rolename_attribute');
     const adfsNested = config.get(configPrefix + 'adfs') ? ':1.2.840.113556.1.4.1941:' : '';
 
+    let dn = '%DN%';
+    if (!config.get(configPrefix + 'get_dn_by_uid')) {
+      dn = usernameAttribute + '=' + remoteUser + ',' + userbase;
+    }
+
+    const memberAttribute = config.get(configPrefix + 'member_attribute');
+    let memberFilter;
+    if (memberAttribute == 'member') {
+      memberFilter = '(member' + adfsNested + '=' + dn + ')';
+    } else if (memberAttribute == 'memberUid') {
+      memberFilter = '(memberUid=' + remoteUser + ')'
+    } else if (memberAttribute == 'uniquemember') {
+      memberFilter = '(uniquemember=' + dn + ')';
+    } else {
+      server.log(['plugin:own-home', 'error'], 'Invalid LDAP member attribute: ' + memberAttribute);
+      return null;
+    }
+
     return {
       scope: 'sub',
-      filter: '(&' + searchFilter + '(member' + adfsNested + '=' + usernameAttribute + '=' + remoteUser + ',' + userbase + '))',
+      filter: '(&' + searchFilter + memberFilter + ')',
       attributes: [rolenameAttribute]
     };    
   } 
