@@ -26,7 +26,7 @@ module.exports = function (server) {
       url: config.get('own_home.elasticsearch.url'),
       username: config.get('elasticsearch.username'),
       password: config.get('elasticsearch.password'),
-      verifySsl: config.get('elasticsearch.ssl.verificationMode'),
+      verifySsl: config.get('elasticsearch.ssl.verificationMode') == 'none' ? false : true,
       clientCrt: config.get('elasticsearch.ssl.certificate'),
       clientKey: config.get('elasticsearch.ssl.key'),
       ca: config.get('own_home.elasticsearch.ssl.certificateAuthorities'),

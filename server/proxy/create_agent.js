@@ -11,7 +11,7 @@ module.exports = _.memoize(function (server) {
   if (!/^https/.test(target.protocol)) return new http.Agent();
 
   const agentOptions = {
-    rejectUnauthorized: config.get('elasticsearch.ssl.verificationMode')
+    rejectUnauthorized: config.get('elasticsearch.ssl.verificationMode') == 'none' ? false : true
   };
 
   if (_.size(config.get('own_home.elasticsearch.ssl.certificateAuthorities'))) {
