@@ -43,11 +43,12 @@ export default function (server, request, remoteUser, kibanaIndexSuffix, callbac
     });
   }
 
-  if (server.config().get('own_home.ldap.get_dn_by_uid') && server.config().get('own_home.ldap.member_attribute') != 'memberUid') {
+  if (server.config().get('own_home.ldap.get_dn_dynamically') && server.config().get('own_home.ldap.member_attribute') != 'memberUid') {
     const userbase = server.config().get('own_home.ldap.userbase');
+    const usernameAttribute = server.config().get('own_home.ldap.username_attribute');
     const options = {
       scope: 'sub',
-      filter: '(uid=' + remoteUser + ')',
+      filter: '(' + usernameAttribute + '=' + remoteUser + ')',
       attributes: ['dn']
     };
     ldapConfig.client.search(userbase, options, function (error, response) {

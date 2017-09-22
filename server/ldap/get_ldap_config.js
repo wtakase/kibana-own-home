@@ -13,7 +13,7 @@ export default function (server, remoteUser) {
     const adfsNested = config.get(configPrefix + 'adfs') ? ':1.2.840.113556.1.4.1941:' : '';
 
     let dn = '%DN%';
-    if (!config.get(configPrefix + 'get_dn_by_uid')) {
+    if (!config.get(configPrefix + 'get_dn_dynamically')) {
       dn = usernameAttribute + '=' + remoteUser + ',' + userbase;
     }
 

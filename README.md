@@ -64,7 +64,7 @@ RequestHeader set X-Proxy-User %{REMOTE_USER}s
 * Kibana 5
 
 ```
-bin/kibana-plugin install https://github.com/wtakase/kibana-own-home/releases/download/v5.6.1/own_home-5.6.1.zip
+bin/kibana-plugin install https://github.com/wtakase/kibana-own-home/releases/download/v5.6.1-1/own_home-5.6.1-1.zip
 ```
 
 ## Options
@@ -93,7 +93,7 @@ own_home.ldap.username_attribute: cn
 own_home.ldap.rolename_attribute: cn
 own_home.ldap.adfs: false
 own_home.ldap.member_attribute: member <-- member or memberUid or uniquemember
-own_home.ldap.get_dn_by_uid: false <-- if true, get the user's DN dynamically by using uid (username)
+own_home.ldap.get_dn_dynamically: false <-- if true, get the user's DN dynamically by using ldap.username_attribute
 own_home.ldap.bind.dn: ''
 own_home.ldap.bind.password: ''
 own_home.explicit_kibana_index_url.enabled: false
