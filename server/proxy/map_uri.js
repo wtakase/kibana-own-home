@@ -56,6 +56,16 @@ export default function mapUri(server) {
           });
         }
 
+        // NOTE(wtakase): Override authorization header to force to access by elasticsearch.username.
+        if (config.get('own_home.force_to_access_by_es_user')) {
+          const username = config.get('elasticsearch.username');
+          const password = config.get('elasticsearch.password');
+          if (username && password) {
+            request.headers['Authorization'] = 'Basic ' + new Buffer(username + ':' + password).toString('base64');
+            server.log(['plugin:own-home', 'debug'], 'authorization header has been overridden.');
+          }
+        }
+
         if (kibanaIndexAction == 'created') {
           // NOTE(wtakase): Currently there is no way other than to wait a few seconds for the index creation.
           sleep(config.get('own_home.wait_kibana_index_creation')).then(function () {
@@ -69,7 +79,6 @@ export default function mapUri(server) {
         done(null, mappedUrl, request.headers);
       }
     }
-
 
     const replacedIndex = getReplacedIndex(server, request);
     const originalIndex = config.get('kibana.index');

@@ -77,7 +77,8 @@ export default function (kibana) {
             }).default()
           }).default()
         }).default(),
-        wait_kibana_index_creation: number().default(3000)
+        wait_kibana_index_creation: number().default(3000),
+        force_to_access_by_es_user: boolean().default(false)
       }).default();
     },
 
