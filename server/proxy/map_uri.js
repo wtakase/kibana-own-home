@@ -41,6 +41,17 @@ export default function mapUri(server, mappings) {
 
     const mappedUrl = formatUrl(mappedUrlComponents);
     server.log(['plugin:own-home', 'debug'], 'mappedUrl: ' + mappedUrl);
+
+    // NOTE(wtakase): Override authorization header to force to access by elasticsearch.username.
+    if (config.get('own_home.force_to_access_by_es_user')) {
+      const username = config.get('elasticsearch.username');
+      const password = config.get('elasticsearch.password');
+      if (username && password) {
+        request.headers['Authorization'] = 'Basic ' + new Buffer(username + ':' + password).toString('base64');
+        server.log(['plugin:own-home', 'debug'], 'authorization header has been overridden.');
+      }
+    }
+
     done(null, mappedUrl, request.headers);
 
   };

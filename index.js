@@ -76,7 +76,8 @@ export default function (kibana) {
               certificateAuthorities: string()
             }).default()
           }).default()
-        }).default()
+        }).default(),
+        force_to_access_by_es_user: boolean().default(false)
       }).default();
     },
 

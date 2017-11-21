@@ -102,6 +102,7 @@ own_home.explicit_kibana_index_url.proxy.ssl.certificate: '' <-- specify this ki
 own_home.explicit_kibana_index_url.proxy.ssl.key: '' <-- specify this kibana proxy's server cert location if necessary
 own_home.explicit_kibana_index_url.kibana.ssl.verificationMode: true
 own_home.explicit_kibana_index_url.kibana.ssl.certificateAuthorities: '' <-- specify your kibana cert's CA cert location if necessary
+own_home.force_to_access_by_es_user: false <-- override authorization header to force to access by elasticsearch.username
 ```
 
 ## Examples of configuration
