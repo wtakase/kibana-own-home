@@ -77,14 +77,14 @@ export default function (kibana) {
             }).default()
           }).default()
         }).default(),
+        wait_kibana_index_creation: number().default(3000),
         force_to_access_by_es_user: boolean().default(false)
       }).default();
     },
 
     init(server, options) {
       if (server.config().get('own_home.enabled')) {
-        const mappings = kibana.uiExports.mappings.getCombined();
-        initProxy(server, mappings);
+        initProxy(server);
         selectionRoute(server);
       }
     }

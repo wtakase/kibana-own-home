@@ -2,7 +2,6 @@ import Promise from 'bluebird';
 
 import isUpgradeable from '../../../../src/core_plugins/elasticsearch/lib/is_upgradeable';
 import _ from 'lodash';
-import { format } from 'util';
 import createClient from './create_client';
 
 module.exports = function (server, index, ignore) {
@@ -14,9 +13,14 @@ module.exports = function (server, index, ignore) {
   function createNewConfig() {
     return client.create({
       index: index,
-      type: 'config',
-      body: { buildNum: config.get('pkg.buildNum') },
-      id: config.get('pkg.version'),
+      type: 'doc',
+      body: {
+        type: 'config',
+        config: {
+          buildNum: config.get('pkg.buildNum')
+        }
+      },
+      id: 'config:' + config.get('pkg.version'),
       ignore: ignore || []
     });
   }
@@ -31,7 +35,7 @@ module.exports = function (server, index, ignore) {
 
     // if we already have a the current version in the index then we need to stop
     const devConfig = _.find(response.hits.hits, function currentVersion(hit) {
-      return hit._id !== '@@version' && hit._id === config.get('pkg.version');
+      return hit._id !== '@@version' && hit._id === 'config:' + config.get('pkg.version');
     });
 
     if (devConfig) return Promise.resolve();
@@ -55,9 +59,12 @@ module.exports = function (server, index, ignore) {
 
     return client.create({
       index: index,
-      type: 'config',
-      body: body._source,
-      id: config.get('pkg.version')
+      type: 'doc',
+      body: {
+        type: 'config',
+        config: body._source
+      },
+      id: 'config:' + config.get('pkg.version')
     });
   };
 };

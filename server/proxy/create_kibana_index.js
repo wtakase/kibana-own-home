@@ -1,31 +1,27 @@
-import SetupError from '../../../../src/core_plugins/elasticsearch/lib/setup_error';
-import { format } from 'util';
-import createClient from './create_client';
+import migrateConfig from './migrate_config';
 
-module.exports = function (server, index, mappings) {
-  const client = createClient(server);
-
-  function handleError(message) {
-    return function (err) {
-      throw new SetupError(server, message, err);
-    };
-  }
-
-  return client.indices.create({
+module.exports = function (server, index) {
+  const { callWithInternalUser } = server.plugins.elasticsearch.getCluster('admin');
+  return callWithInternalUser('indices.create', {
     index: index,
+    waitForActiveShards: 1,
     body: {
       settings: {
         number_of_shards: 1
       },
-      mappings
+      mappings: server.getKibanaIndexMappingsDsl()
     }
   })
-  .catch(handleError('Unable to create Kibana index "<%= kibana.index %>"'))
+  .catch(() => {
+    throw new Error(`Unable to create Kibana index "${index}"`);
+  })
   .then(function () {
-    return client.cluster.health({
+    return callWithInternalUser('cluster.health', {
       waitForStatus: 'yellow',
       index: index
     })
-    .catch(handleError('Waiting for Kibana index "<%= kibana.index %>" to come online failed.'));
+    .catch(() => {
+      throw new Error(`Waiting for Kibana index "${index}" to come online failed.`);
+    }).then(migrateConfig(server, index, [409]));
   });
 };
