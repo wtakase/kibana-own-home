@@ -11,7 +11,7 @@ import modifyPayload from './modify_payload';
 import initExplicitProxy from './explicit/init_proxy';
 import Boom from 'boom';
 
-module.exports = function(kbnServer, mappings) {
+module.exports = function(kbnServer) {
 
   const server = new Hapi.Server();
 
@@ -69,7 +69,7 @@ module.exports = function(kbnServer, mappings) {
     },
     handler: {
       kibi_proxy: {
-        mapUri: mapUri(kbnServer, mappings),
+        mapUri: mapUri(kbnServer),
         agent: createAgent(kbnServer),
         xforward: true,
         passThrough: true,

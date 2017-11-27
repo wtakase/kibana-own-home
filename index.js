@@ -76,14 +76,14 @@ export default function (kibana) {
               certificateAuthorities: string()
             }).default()
           }).default()
-        }).default()
+        }).default(),
+        wait_kibana_index_creation: number().default(3000)
       }).default();
     },
 
     init(server, options) {
       if (server.config().get('own_home.enabled')) {
-        const mappings = kibana.uiExports.mappings.getCombined();
-        initProxy(server, mappings);
+        initProxy(server);
         selectionRoute(server);
       }
     }
