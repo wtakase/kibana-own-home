@@ -1,6 +1,6 @@
 import Promise from 'bluebird';
 
-import isUpgradeable from '../../../../src/core_plugins/elasticsearch/lib/is_upgradeable';
+import isUpgradeable from './is_upgradeable';
 import _ from 'lodash';
 import createClient from './create_client';
 

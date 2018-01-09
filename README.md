@@ -64,7 +64,7 @@ RequestHeader set X-Proxy-User %{REMOTE_USER}s
 * Kibana 6
 
 ```
-bin/kibana-plugin install https://github.com/wtakase/kibana-own-home/releases/download/v6.0.1/own_home-6.0.1.zip
+bin/kibana-plugin install https://github.com/wtakase/kibana-own-home/releases/download/v6.1.0/own_home-6.1.0.zip
 ```
 
 ## Options
