@@ -234,3 +234,49 @@ Access => front_end_server/app/own_home#/`public`/`dashboard`
 ### Example 3. Set .kibana_public as kibana.index and then open xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx dashboard
 
 Access => front_end_server/app/own_home#/`public`/`dashboard`/`xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx`
+
+## Contribute
+
+### Build instructions
+
+* Clone the Kibana repository.
+```sh
+$ git clone https://github.com/elastic/kibana
+$ cd kibana/
+```
+
+* Checkout the target Kibbana version branch/tag.
+```sh
+$ git checkout v5.6.4
+```
+
+* Install Kibana Nodejs environment and dependencies.
+```sh
+$ nvm install `cat .node-version`
+$ npm install
+```
+
+* Setup Own Home as a plugin inside the Kibana repo.
+```sh
+$ cd plugins/
+$ git clone https://github.com/wtakase/kibana-own-home
+$ cd kibana-own-home/
+```
+
+* Checkout the target Kibbana version branch/tag.
+```sh
+$ git checkout v5.6.4
+```
+
+* Install Own Home dependencies.
+```sh
+$ npm install --legacy-bundling
+```
+
+* Finally build the Own Home plugin file.
+```sh
+$ npm run build
+```
+
+Following all the steps should generate the `own_home-5.6.4.zip`  Kibana plugin
+zip file under Own Home `build/` directory.
