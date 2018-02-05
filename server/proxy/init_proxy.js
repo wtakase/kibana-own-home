@@ -138,7 +138,8 @@ module.exports = function(kbnServer) {
     cookieOptions: {
       password: kbnServer.config().get('own_home.session.secretkey'),
       isSecure: kbnServer.config().get('own_home.session.isSecure'),
-      passThrough: true
+      passThrough: true,
+      ttl: kbnServer.config().get('own_home.session.cookie.ttl')
     }
   };
 
