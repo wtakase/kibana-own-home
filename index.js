@@ -39,7 +39,10 @@ export default function (kibana) {
         session: object({
           secretkey: string().default('the-password-must-be-at-least-32-characters-long'),
           isSecure: boolean().default(true),
-          timeout: number().default(3600000)
+          timeout: number().default(3600000),
+          cookie: object({
+            ttl: number().integer().min(0).default(60 * 60 * 1000)
+          }).default()
         }).default(),
         local: object({
           enabled: boolean().default(true),
