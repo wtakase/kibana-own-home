@@ -64,7 +64,7 @@ RequestHeader set X-Proxy-User %{REMOTE_USER}s
 * Kibana 6
 
 ```
-bin/kibana-plugin install https://github.com/wtakase/kibana-own-home/releases/download/v6.2.2/own_home-6.2.2.zip
+bin/kibana-plugin install https://github.com/wtakase/kibana-own-home/releases/download/v6.2.3/own_home-6.2.3.zip
 ```
 
 ## Options
@@ -130,7 +130,7 @@ own_home.local.groups: [ common01, common02 ]
 ### Configuration with LDAP
 
 Assume the following situation:
- 
+
  * Front end web server runs at https://localhost:443 and sends username by `remote-user` header.
  * Kibana runs at https://localhost:5601.
  * This proxy server runs at https://localhost:19200.
