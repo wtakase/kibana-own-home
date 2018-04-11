@@ -20,6 +20,7 @@ export default function (kibana) {
 
       return object({
         enabled: boolean().default(true),
+        remote_user: string(),
         proxy_user_header: string().default('x-proxy-user'),
         get_username_from_session: object({
           enabled: boolean().default(false),

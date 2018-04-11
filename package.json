@@ -26,6 +26,7 @@
     "ldapjs": "^1.x.x",
     "yar": "^8.x.x",
     "httpolyglot": "^0.1.2",
-    "kibi-h2o2": "https://github.com/sirensolutions/h2o2.git#5.0.0-kibi-1"
+    "kibi-h2o2": "https://github.com/sirensolutions/h2o2.git#5.0.0-kibi-1",
+    "lodash": "3.x.x"
   }
 }
