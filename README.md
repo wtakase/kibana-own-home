@@ -72,6 +72,7 @@ bin/kibana-plugin install https://github.com/wtakase/kibana-own-home/releases/do
 Available options and default values are as follows:
 ```
 own_home.proxy_user_header: x-proxy-user
+own_home.remote_user: '' <-- specify how to fetch username (session, header, or authorization)
 own_home.get_username_from_session.enabled: false
 own_home.get_username_from_session.key: username
 own_home.default_kibana_index_suffix: ''
@@ -159,6 +160,13 @@ own_home.ldap.rolebase: ou=Groups,dc=localhost
 own_home.ldap.search_filter: '(cn=*)'
 own_home.ldap.username_attribute: cn
 own_home.ldap.rolename_attribute: cn
+```
+
+### Change own home port
+You can use any port instead of 19200.
+If you set as follows, the proxy port will be 19201.
+```
+elasticsearch.url: http://localhost:19201
 ```
 
 ### Extract username from session instead of request header (Experimental)
