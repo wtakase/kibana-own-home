@@ -83,6 +83,7 @@ own_home.elasticsearch.ssl.certificateAuthorities: '' <-- specify your elasticse
 own_home.session.secretkey: the-password-must-be-at-least-32-characters-long
 own_home.session.isSecure: true
 own_home.session.timeout: 3600000
+own_home.personal.enabled: true <-- enable to have personal kibana.index
 own_home.local.enabled: true
 own_home.local.groups: [ public, sandbox ]
 own_home.ldap.enabled: false

@@ -20,14 +20,16 @@
       <h4>Available Tenants</h4>
       <div class="well">
         <div ng-if="username">
-          <tr>
-            <div>
-              <td>Personal tenant</td>
-            </div>
-            <div>
-              <td><a href="#/{{ username }}">{{ kibanaIndexPrefix }}_{{ username }}</a></td>
-            </div>
-          </tr>
+          <div ng-if="showPersonalIndex">
+            <tr>
+              <div>
+                <td>Personal tenant</td>
+              </div>
+              <div>
+                <td><a href="#/{{ username }}">{{ kibanaIndexPrefix }}_{{ username }}</a></td>
+              </div>
+            </tr>
+          </div>
           <tr>
             <div>
               <td>Shared tenants</td>

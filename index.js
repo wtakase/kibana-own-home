@@ -45,6 +45,9 @@ export default function (kibana) {
             ttl: number().integer().min(0).default(60 * 60 * 1000)
           }).default()
         }).default(),
+        personal: object({
+          enabled: boolean().default(true)
+        }).default(),
         local: object({
           enabled: boolean().default(true),
           groups: array().items().single().default(['public', 'sandbox'])

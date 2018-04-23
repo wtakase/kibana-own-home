@@ -7,13 +7,15 @@ export default function (server, request, remoteUser, kibanaIndexSuffix, callbac
 
   const config = server.config();
 
-  // NOTE(wtakase): '@' replacement is necessary to support email address as a remoteUser name (issue #52).
-  //                To avoid any unexpected side-effects, the replacement is taken place only at this place.
-  if (remoteUser == kibanaIndexSuffix.replace('%40', '@')) {
-    const replacedKibanaIndexSuffix = kibanaIndexSuffix.replace('%40', '@')
-    server.log(['plugin:own-home', 'debug'], 'kibanaIndexSuffix matches remote user name: ' + replacedKibanaIndexSuffix);
-    setKibanaIndex(server, request, remoteUser, replacedKibanaIndexSuffix);
-    return (callback === null) ? true : getGroups(server, request, remoteUser, callback);
+  if (config.get('own_home.personal.enabled')) {
+    // NOTE(wtakase): '@' replacement is necessary to support email address as a remoteUser name (issue #52).
+    //                To avoid any unexpected side-effects, the replacement is taken place only at this place.
+    if (remoteUser == kibanaIndexSuffix.replace('%40', '@')) {
+      const replacedKibanaIndexSuffix = kibanaIndexSuffix.replace('%40', '@')
+      server.log(['plugin:own-home', 'debug'], 'kibanaIndexSuffix matches remote user name: ' + replacedKibanaIndexSuffix);
+      setKibanaIndex(server, request, remoteUser, replacedKibanaIndexSuffix);
+      return (callback === null) ? true : getGroups(server, request, remoteUser, callback);
+    }
   }
 
   if (config.get('own_home.local.enabled')) {

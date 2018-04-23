@@ -13,7 +13,8 @@ function generateUserInfo(resp, tab, object, reload) {
     groups: resp.data.groups,
     moveTo: tab ? {tab: tab, object: object || ''} : null,
     reload: reload,
-    backHref: resp.data.backHref
+    backHref: resp.data.backHref,
+    showPersonalIndex: resp.data.showPersonalIndex
   }
 }
 
@@ -66,6 +67,9 @@ require('ui/modules')
   $scope.username = userInfo.username;
   $scope.groups = userInfo.groups;
   $scope.backHref = userInfo.backHref;
+  if (userInfo.showPersonalIndex == 'true') {
+    $scope.showPersonalIndex = userInfo.showPersonalIndex;
+  }
   $location.path('').replace();
   if (userInfo.moveTo && ['discover', 'visualize', 'dashboard'].indexOf(userInfo.moveTo.tab) > -1) {
     window.location = './own_home';

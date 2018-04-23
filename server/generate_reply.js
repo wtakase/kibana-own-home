@@ -7,6 +7,7 @@ export default function (server, request, remoteUser, groups) {
   const prefix = remoteUser ? config.get('kibana.index') : '';
   const isExplicitMode = (remoteUser && config.get('own_home.explicit_kibana_index_url.enabled'));
   const backHref = (isExplicitMode === true) ? '/' + currentIndex.slice(prefix.length + 1) + '/app/kibana' : './kibana';
+  const showPersonalIndex = config.get('own_home.personal.enabled');
 
   return {
     currentKibanaIndex: currentIndex,
@@ -14,6 +15,7 @@ export default function (server, request, remoteUser, groups) {
     username: remoteUser || '',
     groups: groups || [],
     explicitMode: isExplicitMode === true ? 'true' : 'false',
-    backHref: backHref
+    backHref: backHref,
+    showPersonalIndex: showPersonalIndex === true ? 'true' : 'false'
   };
 };
