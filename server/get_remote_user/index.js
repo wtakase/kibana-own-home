@@ -7,7 +7,7 @@ export default function (server, request) {
     return getFromSession(server, request);
   } else if (server.config().get('own_home.jwt.enabled')) {
     return getFromJwt(server, request);
-  } {
+  } else {
     return getFromHeader(server, request);
   }
 };
