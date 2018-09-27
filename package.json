@@ -26,6 +26,8 @@
     "ldapjs": "^1.x.x",
     "yar": "^8.x.x",
     "httpolyglot": "^0.1.2",
-    "kibi-h2o2": "https://github.com/sirensolutions/h2o2.git#5.0.0-kibi-1"
+    "kibi-h2o2": "https://github.com/sirensolutions/h2o2.git#5.0.0-kibi-1",
+    "jsonwebtoken": "8.3.0",
+    "axios": "0.18.0"
   }
 }

@@ -1,6 +1,9 @@
 import { defaults, omit, trimRight, trimLeft } from 'lodash';
 import { parse as parseUrl, format as formatUrl, resolve } from 'url';
 import replaceKibanaIndex from './replace_kibana_index_in_path';
+import getJwt from '../jwt/get_jwt';
+import verifyJwt from '../jwt/verify_jwt';
+import Boom from 'boom';
 
 export default function mapUri(server, mappings) {
   const config = server.config();
@@ -41,7 +44,19 @@ export default function mapUri(server, mappings) {
 
     const mappedUrl = formatUrl(mappedUrlComponents);
     server.log(['plugin:own-home', 'debug'], 'mappedUrl: ' + mappedUrl);
-    done(null, mappedUrl, request.headers);
+
+    const jwtToken = getJwt(request);
+    if (jwtToken) {
+      verifyJwt(server, jwtToken,
+        () => {
+          done(null, mappedUrl, request.headers);
+        },
+        () => {
+          done(Boom.forbidden('Unauthorized'), null, null);
+        });
+    } else {
+      done(null, mappedUrl, request.headers);
+    }
 
   };
 };
