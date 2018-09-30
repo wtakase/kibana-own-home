@@ -253,7 +253,7 @@ $ git clone https://github.com/elastic/kibana
 $ cd kibana/
 ```
 
-* Checkout the target Kibbana version branch/tag.
+* Checkout the target Kibana version branch/tag.
 ```sh
 $ git checkout v5.6.4
 ```
@@ -271,7 +271,7 @@ $ git clone https://github.com/wtakase/kibana-own-home
 $ cd kibana-own-home/
 ```
 
-* Checkout the target Kibbana version branch/tag.
+* Checkout the target Kibana version branch/tag.
 ```sh
 $ git checkout v5.6.4
 ```
