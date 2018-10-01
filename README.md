@@ -288,3 +288,19 @@ $ npm run build
 
 Following all the steps should generate the `own_home-5.6.4.zip`  Kibana plugin
 zip file under Own Home `build/` directory.
+
+
+## Removing the plugin
+
+### Remove plugin and delete kibana.yml
+
+```sh
+$ bin/kibana-plugin remove own_home
+$ rm config/kibana.yml
+```
+### Re-create kibana.yml to make Kibana run again
+
+```sh
+$ touch config/kibana.yml
+```
+Note: if you elasticsearch is running in docker or somewhere else, make sure to set the `elasticsearch.url` in `kibana.yml` to its correct value.
