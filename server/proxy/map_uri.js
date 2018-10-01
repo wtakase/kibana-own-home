@@ -45,8 +45,8 @@ export default function mapUri(server, mappings) {
     const mappedUrl = formatUrl(mappedUrlComponents);
     server.log(['plugin:own-home', 'debug'], 'mappedUrl: ' + mappedUrl);
 
-    const jwtToken = getJwt(request);
-    if (jwtToken) {
+    if (config.get('own_home.jwt.enabled')) {
+      const jwtToken = getJwt(request);
       verifyJwt(server, jwtToken,
         () => {
           done(null, mappedUrl, request.headers);
