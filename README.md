@@ -61,6 +61,8 @@ RequestHeader set X-Proxy-User %{REMOTE_USER}s
 
 ## Installation
 
+**Important:** Before setting up own-home, you should take a backup of your `kibana.yml` if you wish to remove the plugin in future.
+
 * Kibana 6
 
 ```
@@ -288,3 +290,17 @@ $ npm run build
 
 Following all the steps should generate the `own_home-5.6.4.zip`  Kibana plugin
 zip file under Own Home `build/` directory.
+
+
+## Removing the plugin
+
+### Remove plugin and replace kibana.yml
+
+* Remove own-home plugin
+```sh
+$ bin/kibana-plugin remove own_home
+```
+
+* Replace `kibana.yml` with the backed-up one to make Kibana run again without own-home
+
+Now, restart Kibana and youl'll have it running without _own-home_. 
