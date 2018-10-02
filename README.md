@@ -61,6 +61,8 @@ RequestHeader set X-Proxy-User %{REMOTE_USER}s
 
 ## Installation
 
+**Important:** Before setting up own-home, you should take a backup of your `kibana.yml` if you wish to remove the plugin in future.
+
 * Kibana 6
 
 ```
@@ -292,15 +294,13 @@ zip file under Own Home `build/` directory.
 
 ## Removing the plugin
 
-### Remove plugin and delete kibana.yml
+### Remove plugin and replace kibana.yml
 
+* Remove own-home plugin
 ```sh
 $ bin/kibana-plugin remove own_home
-$ rm config/kibana.yml
 ```
-### Re-create kibana.yml to make Kibana run again
 
-```sh
-$ touch config/kibana.yml
-```
-Note: if you elasticsearch is running in docker or somewhere else, make sure to set the `elasticsearch.url` in `kibana.yml` to its correct value.
+* Replace `kibana.yml` with the backed-up one to make Kibana run again without own-home
+
+Now, restart Kibana and youl'll have it running without _own-home_. 
