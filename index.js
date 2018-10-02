@@ -25,6 +25,11 @@ export default function (kibana) {
           enabled: boolean().default(false),
           key: string().default('username')
         }).default(),
+        jwt: object({
+          enabled: boolean().default(false),
+          userclaim: string().default('email'),
+          verifyurl: string()
+        }).default(),
         default_kibana_index_suffix: string(),
         ssl: object({
           certificate: string(),
