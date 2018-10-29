@@ -1,4 +1,4 @@
-import { defaults, omit, trimRight, trimLeft, pull } from 'lodash';
+import { defaults, omit, trimEnd, trimStart, pull } from 'lodash';
 import { parse as parseUrl, format as formatUrl, resolve } from 'url';
 import getSuffixFromPath from './get_suffix_from_path';
 import getRemoteUser from '../../get_remote_user';
@@ -8,7 +8,7 @@ export default function mapUri(server) {
   const config = server.config();
 
   function joinPaths(pathA, pathB) {
-    return trimRight(pathA, '/') + '/' + trimLeft(pathB, '/');
+    return trimEnd(pathA, '/') + '/' + trimStart(pathB, '/');
   }
 
   return function (request, done) {
