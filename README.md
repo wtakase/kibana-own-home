@@ -66,7 +66,7 @@ RequestHeader set X-Proxy-User %{REMOTE_USER}s
 * Kibana 6
 
 ```
-bin/kibana-plugin install https://github.com/wtakase/kibana-own-home/releases/download/v6.4.3/own_home-6.4.3.zip
+bin/kibana-plugin install https://github.com/wtakase/kibana-own-home/releases/download/v6.5.0/own_home-6.5.0.zip
 ```
 
 ## Options
@@ -123,6 +123,7 @@ Assume the following situation:
 
 Set kibana.yml as follows:
 ```
+xpack.spaces.enabled: false    <-- Space feature is not supported.
 elasticsearch.url: http://localhost:19200
 elasticsearch.requestHeadersWhitelist: [ x-proxy-user, cookie ]
 own_home.session.secretkey: the-password-must-be-at-least-32-characters-long
@@ -145,6 +146,7 @@ Assume the following situation:
 
 Set kibana.yml as follows:
 ```
+xpack.spaces.enabled: false    <-- Space feature is not supported.
 elasticsearch.url: https://localhost:19200
 elasticsearch.ssl.certificateAuthorities: /path/to/this/proxy/server/cert/CA.crt
 elasticsearch.requestHeadersWhitelist: [ remote-user, cookie ]
@@ -181,6 +183,7 @@ In this case, you don't need to set up a front end server.
 
 Here is an example of integration with [search-guard-kibana-plugin](https://github.com/floragunncom/search-guard-kibana-plugin):
 ```
+xpack.spaces.enabled: false    <-- Space feature is not supported.
 server.defaultRoute: /app/own_home
 elasticsearch.url: http://localhost:19200
 elasticsearch.requestHeadersWhitelist: [ cookie, authorization ]
