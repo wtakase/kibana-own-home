@@ -80,7 +80,14 @@ export default function mapUri(server) {
       }
     }
 
-    const replacedIndex = getReplacedIndex(server, request);
+    var replacedIndex = getReplacedIndex(server, request);
+
+    var tenant = request.headers['tenant'];
+
+    if(typeof tenant !== 'undefined' && tenant != null){
+        eplacedIndex = ".kibana_" + tenant;
+    }
+    
     const originalIndex = config.get('kibana.index');
     const path = request.path;
 
