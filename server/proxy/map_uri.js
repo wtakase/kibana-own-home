@@ -85,7 +85,7 @@ export default function mapUri(server) {
     var tenant = request.headers['tenant'];
 
     if(typeof tenant !== 'undefined' && tenant != null){
-        eplacedIndex = ".kibana_" + tenant;
+        replacedIndex = ".kibana_" + tenant;
     }
     
     const originalIndex = config.get('kibana.index');
