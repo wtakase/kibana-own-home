@@ -1,17 +1,18 @@
-import generateReply from '../generate_reply';
 import getLdapConfig from './get_ldap_config';
 
-export default function (server, request, remoteUser, groups, callback) {
+export default function (server, request, remoteUser) {
   const ldapConfig = getLdapConfig(server, remoteUser);
 
+  let groups = []
+
   if (ldapConfig === null) {
-    callback(generateReply(server, request, remoteUser, groups));
+    return groups;
   }
 
   function searchGroups(error, response) {
     if (error != undefined) {
       server.log(['plugin:own-home', 'error'], 'LDAP search error: ' + error);
-      callback(generateReply(server, request, remoteUser, groups));
+      return groups;
     }
 
     response.on('searchEntry', function(entry) {
@@ -23,13 +24,12 @@ export default function (server, request, remoteUser, groups, callback) {
 
     response.on('error', function(error) {
       server.log(['plugin:own-home', 'error'], 'LDAP search error: ' + error.message);
-      callback(generateReply(server, request, remoteUser, groups));
+      return groups;
     });
 
     response.on('end', function(result) {
       server.log(['plugin:own-home', 'debug'], 'LDAP search status: ' + result.status);
-      server.log(['plugin:own-home', 'debug'], 'Found groups: ' + groups.toString());
-      callback(generateReply(server, request, remoteUser, groups));
+      return groups;
     });
   }
 
@@ -46,7 +46,7 @@ export default function (server, request, remoteUser, groups, callback) {
 
       if (error != undefined) {
         server.log(['plugin:own-home', 'error'], 'LDAP search error: ' + error);
-        callback(generateReply(server, request, remoteUser, groups));
+        return groups;
       }
 
       response.on('searchEntry', function(entry) {
@@ -58,7 +58,7 @@ export default function (server, request, remoteUser, groups, callback) {
 
       response.on('error', function(error) {
         server.log(['plugin:own-home', 'error'], 'LDAP search error: ' + error.message);
-        callback(generateReply(server, request, remoteUser, groups));
+        return groups;
       });
 
       response.on('end', function(result) {

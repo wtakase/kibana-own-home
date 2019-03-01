@@ -18,71 +18,55 @@ export default function (kibana) {
     config(Joi) {
       const { array, boolean, number, object, string } = Joi;
 
-      return object({
-        enabled: boolean().default(true),
-        remote_user: string(),
-        proxy_user_header: string().default('x-proxy-user'),
-        get_username_from_session: object({
-          enabled: boolean().default(false),
-          key: string().default('username')
-        }).default(),
-        default_kibana_index_suffix: string(),
-        ssl: object({
-          certificate: string(),
-          key: string()
-        }).default(),
-        elasticsearch: object({
-          url: string().default('http://localhost:9200'),
-          ssl: object({
-            certificateAuthorities: array().single().items(string())
-          }).default()
-        }).default(),
-        session: object({
-          secretkey: string().default('the-password-must-be-at-least-32-characters-long'),
-          isSecure: boolean().default(true),
-          timeout: number().default(3600000),
-          cookie: object({
-            ttl: number().integer().min(0).default(60 * 60 * 1000)
-          }).default()
-        }).default(),
-        local: object({
-          enabled: boolean().default(true),
-          groups: array().items().single().default(['public', 'sandbox'])
-        }).default(),
-        ldap: object({
+      return Joi.object({
+        enabled: Joi.boolean().default(true),
+        remote_user: Joi.string(),
+        proxy_user_header: Joi.string().default('x-proxy-user'),
+        get_username_from_session: Joi.object({
           enabled: Joi.boolean().default(false),
-          url: string().default('ldap://localhost:389'),
-          userbase: string().default('ou=People,dc=localhost'),
-          rolebase: string().default('ou=Groups,dc=localhost'),
-          search_filter: string().default('(cn=*)'),
-          username_attribute: string().default('cn'),
-          rolename_attribute: string().default('cn'),
-          adfs: boolean().default(false),
-          member_attribute: string().valid('member', 'memberUid', 'uniquemember').default('member'),
-          get_dn_dynamically: boolean().default(false),
-          bind: object({
-            dn: string(),
-            password: string()
+          key: Joi.string().default('username')
+        }).default(),
+        default_kibana_index_suffix: Joi.string(),
+        ssl: Joi.object({
+          certificate: Joi.string(),
+          key: Joi.string()
+        }).default(),
+        elasticsearch: Joi.object({
+          url: Joi.string().default('http://localhost:9200'),
+          ssl: Joi.object({
+            certificateAuthorities: Joi.array().single().items(Joi.string())
           }).default()
         }).default(),
-        explicit_kibana_index_url: object({
+        session: Joi.object({
+          secretkey: Joi.string().default('the-password-must-be-at-least-32-characters-long'),
+          isSecure: Joi.boolean().default(true),
+          timeout: Joi.number().default(3600000),
+          cookie: Joi.object({
+            ttl: Joi.number().integer().min(0).default(60 * 60 * 1000)
+          }).default()
+        }).default(),
+        local: Joi.object({
+          enabled: Joi.boolean().default(true),
+          groups: Joi.array().items().single().default(['public', 'sandbox'])
+        }).default(),
+        ldap: Joi.object({
           enabled: Joi.boolean().default(false),
-          proxy: object({
-            url: string().default('http://localhost:15601'),
-            ssl: object({
-              certificate: string(),
-              key: string()
-            }).default()
-          }).default(),
-          kibana: object({
-            ssl: object({
-              verificationMode: Joi.boolean().default(true),
-              certificateAuthorities: string()
-            }).default()
+          url: Joi.string().default('ldap://localhost:389'),
+          userbase: Joi.string().default('ou=People,dc=localhost'),
+          rolebase: Joi.string().default('ou=Groups,dc=localhost'),
+          search_filter: Joi.string().default('(cn=*)'),
+          username_attribute: Joi.string().default('cn'),
+          rolename_attribute: Joi.string().default('cn'),
+          adfs: Joi.boolean().default(false),
+          member_attribute: Joi.string().valid('member', 'memberUid', 'uniquemember').default('member'),
+          get_dn_dynamically: Joi.boolean().default(false),
+          bind: Joi.object({
+            dn: Joi.string(),
+            password: Joi.string()
           }).default()
         }).default(),
-        wait_kibana_index_creation: number().default(3000),
-        force_to_access_by_es_user: boolean().default(false)
+        wait_kibana_index_creation: Joi.number().default(3000),
+        force_to_access_by_es_user: Joi.boolean().default(false)
       }).default();
     },
 

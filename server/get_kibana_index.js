@@ -9,7 +9,7 @@ export default function (server, request, remoteUser) {
     server.log(['plugin:own-home', 'debug'], 'Stored kibana.index not found: ' + error);
     let suffix = remoteUser;
     const defaultSuffix = server.config().get('own_home.default_kibana_index_suffix');
-    if (defaultSuffix && validate(server, request, remoteUser, defaultSuffix, null)) {
+    if (defaultSuffix && validate(server, request, remoteUser, defaultSuffix)) {
       suffix = defaultSuffix;
     }
     setKibanaIndex(server, request, remoteUser, suffix);

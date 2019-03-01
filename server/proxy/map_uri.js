@@ -12,7 +12,7 @@ export default function mapUri(server) {
     return trimEnd(pathA, '/') + '/' + trimStart(pathB, '/');
   }
 
-  return function (request, done) {
+  return function (request) {
     const {
       protocol: esUrlProtocol,
       slashes: esUrlHasSlashes,
@@ -68,15 +68,21 @@ export default function mapUri(server) {
 
         if (kibanaIndexAction == 'created') {
           // NOTE(wtakase): Currently there is no way other than to wait a few seconds for the index creation.
-          sleep(config.get('own_home.wait_kibana_index_creation')).then(function () {
+          return sleep(config.get('own_home.wait_kibana_index_creation')).then(function () {
             server.log(['plugin:own-home', 'debug'], 'Wait a few seconds for Kibana index creation');
-            done(null, mappedUrl, request.headers);
+            return {
+              uri: mappedUrl
+            };
           });
         } else {
-          done(null, mappedUrl, request.headers);
+          return {
+            uri: mappedUrl
+          };
         }
       } else {
-        done(null, mappedUrl, request.headers);
+        return {
+          uri: mappedUrl
+        };
       }
     }
 
@@ -92,16 +98,20 @@ export default function mapUri(server) {
 
       // Check replaced kibana index exists
       const client = createClient(server);
-      client.indices.exists({ index: replacedIndex }).then(function (exists) {
+      return client.indices.exists({ index: replacedIndex }).then(function (exists) {
         if (exists === true) {
           // Ignore 409 error: 'document_already_exists_exception'
-          migrateConfig(server, replacedIndex, [409]).then(coreMapUri(replacedPath, 'migrated'));
+          return migrateConfig(server, replacedIndex, [409]).then(function () {
+                   return coreMapUri(replacedPath, 'migrated');
+                 });
         } else {
-          createKibanaIndex(server, replacedIndex).then(coreMapUri(replacedPath, 'created'));
+          return createKibanaIndex(server, replacedIndex).then(function () {
+                   return coreMapUri(replacedPath, 'created')
+                 });
         }
       });
     } else {
-      coreMapUri(path, false);
+      return coreMapUri(path, false);
     }
   };
 };

@@ -1,9 +1,7 @@
-import getGroups from './get_groups';
-import setKibanaIndex from './set_kibana_index';
 import validateByLdap from './ldap/validate';
 import validateByLocal from './local/validate';
 
-export default function (server, request, remoteUser, kibanaIndexSuffix, callback) {
+export default function (server, request, remoteUser, kibanaIndexSuffix) {
 
   const config = server.config();
 
@@ -12,21 +10,22 @@ export default function (server, request, remoteUser, kibanaIndexSuffix, callbac
   if (remoteUser == kibanaIndexSuffix.replace('%40', '@')) {
     const replacedKibanaIndexSuffix = kibanaIndexSuffix.replace('%40', '@')
     server.log(['plugin:own-home', 'debug'], 'kibanaIndexSuffix matches remote user name: ' + replacedKibanaIndexSuffix);
-    setKibanaIndex(server, request, remoteUser, replacedKibanaIndexSuffix);
-    return (callback === null) ? true : getGroups(server, request, remoteUser, callback);
+    return true;
   }
 
   if (config.get('own_home.local.enabled')) {
     if (validateByLocal(server, kibanaIndexSuffix)) {
       server.log(['plugin:own-home', 'debug'], 'kibanaIndexSuffix matches local group: ' + kibanaIndexSuffix);
-      setKibanaIndex(server, request, remoteUser, kibanaIndexSuffix);
-      return (callback === null) ? true : getGroups(server, request, remoteUser, callback);
+      return true;
     }
   }
 
   if (config.get('own_home.ldap.enabled')) {
-    return validateByLdap(server, request, remoteUser, kibanaIndexSuffix, callback);
-  } else {
-    return (callback === null) ? false : getGroups(server, request, remoteUser, callback);
+    if (validateByLdap(server, request, remoteUser, kibanaIndexSuffix)) {
+      server.log(['plugin:own-home', 'debug'], 'kibanaIndexSuffix matches LDAP group: ' + kibanaIndexSuffix);
+      return true;
+    }
   }
+
+  return false;
 };
