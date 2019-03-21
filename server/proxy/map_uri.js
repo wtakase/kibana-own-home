@@ -4,6 +4,8 @@ import createKibanaIndex from './create_kibana_index';
 import migrateConfig from './migrate_config';
 import getReplacedIndex from './get_replaced_index';
 import createClient from './create_client';
+import getRemoteUser from '../get_remote_user';
+import validate from '../validate';
 
 export default function mapUri(server) {
   const config = server.config();
@@ -85,6 +87,8 @@ export default function mapUri(server) {
     var tenant = request.headers['tenant'];
 
     if(typeof tenant !== 'undefined' && tenant != null){
+		const remoteUser = getRemoteUser(server, request);
+        validate(server, request, remoteUser, tenant, null);
         replacedIndex = ".kibana_" + tenant;
     }
     
