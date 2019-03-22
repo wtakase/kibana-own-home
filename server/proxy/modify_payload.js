@@ -4,7 +4,7 @@ import getReplacedIndex from './get_replaced_index';
 export default function modifyPayload(server) {
   const config = server.config();
 
-  return function (request) {
+  return async function (request) {
 
     let req = request.raw.req;
     return new Promise(function (fulfill, reject) {
@@ -16,16 +16,16 @@ export default function modifyPayload(server) {
         body += chunk;
       });
 
-      req.on('end', function () {
+      req.on('end', async function () {
         fulfill({
-          payload: replaceRequestBody(body)
+          payload: await replaceRequestBody(body)
         });
       });
 
     });
 
     // Replace kibana.index in mget request body
-    function replaceRequestBody(body) {
+    async function replaceRequestBody(body) {
       if (!request.path.endsWith('_mget')) {
         return new Buffer(body);
       }
@@ -38,9 +38,9 @@ export default function modifyPayload(server) {
         if ('docs' in data) {
           let replaced = false;
           let i = 0;
-          data['docs'] = _.map(data['docs'], function (doc) {
+          data['docs'] = await Promise.all(_.map(data['docs'], async function (doc) {
             if ('_index' in doc && doc['_index'] == config.get('kibana.index')) {
-              const replacedIndex = getReplacedIndex(server, request);
+              const replacedIndex = await getReplacedIndex(server, request);
               if (replacedIndex) {
                 doc['_index'] = replacedIndex;
                 replaced = true;
@@ -53,7 +53,7 @@ export default function modifyPayload(server) {
             }
             i++;
             return doc;
-          });
+          }));
           payload = JSON.stringify(data);
           if (replaced) {
             server.log(['plugin:own-home', 'debug'], 'Original request payload: ' + JSON.stringify(JSON.parse(body)));

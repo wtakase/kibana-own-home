@@ -3,18 +3,22 @@ import getLocalGroups from './local/get_groups';
 
 export default function (server, request, remoteUser) {
 
-  const config = server.config();
-
   let groups = [];
 
-  if (config.get('own_home.local.enabled')) {
-    Array.prototype.push.apply(groups, getLocalGroups(server));
-  }
+  const getGroups = async function () {
+    const config = server.config();
 
-  if (config.get('own_home.ldap.enabled')) {
-    Array.prototype.push.apply(groups, getLdapGroups(server, request, remoteUser));
-  }
+    if (config.get('own_home.local.enabled')) {
+      Array.prototype.push.apply(groups, getLocalGroups(server));
+    }
 
-  server.log(['plugin:own-home', 'debug'], 'Found groups: ' + groups.toString());
-  return groups;
+    if (config.get('own_home.ldap.enabled')) {
+      const ldapGroups = await getLdapGroups(server, request, remoteUser);
+      Array.prototype.push.apply(groups, ldapGroups);
+    }
+
+    server.log(['plugin:own-home', 'debug'], 'Found groups: ' + groups.toString());
+    return groups;
+  }
+  return getGroups();
 };

@@ -63,12 +63,12 @@ module.exports = function(kbnServer) {
       },
       handler: {
         proxy: {
-          mapUri: mapUri(kbnServer),
+          mapUri: await mapUri(kbnServer),
           agent: createAgent(kbnServer),
           xforward: true,
           passThrough: true,
           timeout: kbnServer.config().get('elasticsearch.requestTimeout'),
-          onBeforeSendRequest: modifyPayload(kbnServer),
+          onBeforeSendRequest: await modifyPayload(kbnServer),
           onResponse: function (err, response, request, h) {
             if (err) {
               throw err;
@@ -80,7 +80,7 @@ module.exports = function(kbnServer) {
                 if (kbnServer.config().get('own_home.get_username_from_session.enabled') && payload && payload.toString() == 'Unauthorized') {
                   p = h.response(Boom.unauthorized('plugin:own-home: unauthorized'));
                 } else {
-                  const replacedIndex = getReplacedIndex(kbnServer, request);
+                  const replacedIndex = await getReplacedIndex(kbnServer, request);
                   if (replacedIndex && payload) {
                     // Workaround for creating shortened url
                     if (request.path.startsWith('/' + kbnServer.config().get('kibana.index') + '/url/')) {

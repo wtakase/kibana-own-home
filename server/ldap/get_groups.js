@@ -1,74 +1,54 @@
+import LdapClient from 'ldapjs-client';
 import getLdapConfig from './get_ldap_config';
 
 export default function (server, request, remoteUser) {
+  const configPrefix = 'own_home.ldap.';
+  const config = server.config();
+
   const ldapConfig = getLdapConfig(server, remoteUser);
 
   let groups = []
 
-  if (ldapConfig === null) {
-    return groups;
-  }
+  const getGroups = async function () {
+    const client = new LdapClient({
+      url: config.get(configPrefix + 'url')
+    });
 
-  function searchGroups(error, response) {
-    if (error != undefined) {
-      server.log(['plugin:own-home', 'error'], 'LDAP search error: ' + error);
-      return groups;
+    if (config.get(configPrefix + 'bind.dn') && config.get(configPrefix + 'bind.password')) {
+      try {
+        await client.bind(config.get(configPrefix + 'bind.dn'), config.get(configPrefix + 'bind.password'));
+      } catch (e) {
+        server.log(['plugin:own-home', 'error'], 'LDAP bind error: ' + e);
+        return groups;
+      }
     }
 
-    response.on('searchEntry', function(entry) {
-      server.log(['plugin:own-home', 'debug'], 'LDAP search result: ' + entry.object[ldapConfig.rolenameAttribute]);
-      if (entry.object[ldapConfig.rolenameAttribute] !== remoteUser) {
-        groups.push(entry.object[ldapConfig.rolenameAttribute]);
-      }
-    });
-
-    response.on('error', function(error) {
-      server.log(['plugin:own-home', 'error'], 'LDAP search error: ' + error.message);
-      return groups;
-    });
-
-    response.on('end', function(result) {
-      server.log(['plugin:own-home', 'debug'], 'LDAP search status: ' + result.status);
-      return groups;
-    });
-  }
-
-  if (server.config().get('own_home.ldap.get_dn_dynamically') && server.config().get('own_home.ldap.member_attribute') != 'memberUid') {
-    const userbase = server.config().get('own_home.ldap.userbase');
-    const usernameAttribute = server.config().get('own_home.ldap.username_attribute');
-    const options = {
-      scope: 'sub',
-      filter: '(' + usernameAttribute + '=' + remoteUser + ')',
-      attributes: ['dn']
-    };
-    ldapConfig.client.search(userbase, options, function (error, response) {
-      let dn = null;
-
-      if (error != undefined) {
-        server.log(['plugin:own-home', 'error'], 'LDAP search error: ' + error);
+    if (config.get(configPrefix + 'get_dn_dynamically') && config.get(configPrefix + 'member_attribute') != 'memberUid') {
+      const userbase = config.get(configPrefix + 'userbase');
+      const usernameAttribute = config.get(configPrefix + 'username_attribute');
+      const options = {
+        scope: 'sub',
+        filter: '(' + usernameAttribute + '=' + remoteUser + ')',
+        attributes: ['dn']
+      };
+      let dn;
+      const dnEntries = await client.search(userbase, options);
+      try {
+        dn = dnEntries[0].dn;
+      } catch (e) {
+        server.log(['plugin:own-home', 'error'], 'No DN Found');
         return groups;
       }
+      server.log(['plugin:own-home', 'debug'], 'Found DN: ' + dn);
+      ldapConfig.options['filter'] = ldapConfig.options['filter'].replace('%DN%', dn);
+    }
 
-      response.on('searchEntry', function(entry) {
-        server.log(['plugin:own-home', 'debug'], 'LDAP search result: ' + entry.object['dn']);
-        if (entry.object['dn']) {
-          dn = entry.object['dn'];
-        }
-      });
-
-      response.on('error', function(error) {
-        server.log(['plugin:own-home', 'error'], 'LDAP search error: ' + error.message);
-        return groups;
-      });
-
-      response.on('end', function(result) {
-        server.log(['plugin:own-home', 'debug'], 'LDAP search status: ' + result.status);
-        server.log(['plugin:own-home', 'debug'], 'Found DN: ' + dn);
-        ldapConfig.options['filter'] = ldapConfig.options['filter'].replace('%DN%', dn);
-        ldapConfig.client.search(ldapConfig.rolebase, ldapConfig.options, searchGroups);
-      });
-    });
-  } else {
-    ldapConfig.client.search(ldapConfig.rolebase, ldapConfig.options, searchGroups);
+    const entries = await client.search(ldapConfig.rolebase, ldapConfig.options);
+    for (let entry of entries) {
+        groups.push(entry.cn)
+    }
+    server.log(['plugin:own-home', 'debug'], 'Found LDAP groups: ' + groups.toString());
+    return groups;
   }
+  return getGroups();
 };

@@ -6,6 +6,7 @@ import getReplacedIndex from './get_replaced_index';
 import createClient from './create_client';
 import getRemoteUser from '../get_remote_user';
 import validate from '../validate';
+import setKibanaIndex from '../set_kibana_index';
 
 export default function mapUri(server) {
   const config = server.config();
@@ -14,7 +15,7 @@ export default function mapUri(server) {
     return trimEnd(pathA, '/') + '/' + trimStart(pathB, '/');
   }
 
-  return function (request) {
+  return async function (request) {
     const {
       protocol: esUrlProtocol,
       slashes: esUrlHasSlashes,
@@ -88,16 +89,16 @@ export default function mapUri(server) {
       }
     }
 
-    var replacedIndex = getReplacedIndex(server, request);
-
-    var tenant = request.headers['tenant'];
-
-    if(typeof tenant !== 'undefined' && tenant != null){
-		const remoteUser = getRemoteUser(server, request);
-        validate(server, request, remoteUser, tenant, null);
-        replacedIndex = ".kibana_" + tenant;
+    const tenant = request.headers['tenant'];
+    if (typeof tenant !== 'undefined' && tenant != null) {
+      const remoteUser = getRemoteUser(server, request);
+      const isValidated = await validate(server, request, remoteUser, tenant);
+      if (isValidated) {
+        setKibanaIndex(server, request, remoteUser, tenant);
+      }
     }
-    
+
+    const replacedIndex = await getReplacedIndex(server, request);
     const originalIndex = config.get('kibana.index');
     const path = request.path;
 

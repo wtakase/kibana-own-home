@@ -23,7 +23,7 @@
     "eslint-plugin-mocha": "1.1.0"
   },
   "dependencies": {
-    "ldapjs": "^1.x.x",
+    "ldapjs-client": "^0.1.x",
     "yar": "^9.x.x",
     "httpolyglot": "^0.1.2",
     "h2o2": "https://github.com/wtakase/h2o2.git#modify-payload",
