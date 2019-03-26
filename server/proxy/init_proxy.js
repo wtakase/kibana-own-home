@@ -105,7 +105,7 @@ module.exports = function(kbnServer) {
                 }
                 const r = h.response(p);
                 r.headers = response.headers;
-                return r;
+                return r.header('Content-length', JSON.stringify(p).length);
               } catch (err) {
                 throw err;
               }

@@ -66,7 +66,7 @@ RequestHeader set X-Proxy-User %{REMOTE_USER}s
 * Kibana 6
 
 ```
-bin/kibana-plugin install https://github.com/wtakase/kibana-own-home/releases/download/v6.6.1-1/own_home-6.6.1-1.zip
+bin/kibana-plugin install https://github.com/wtakase/kibana-own-home/releases/download/v6.6.1-2/own_home-6.6.1-2.zip
 ```
 
 ## Options
@@ -118,7 +118,7 @@ Assume the following situation:
 Set kibana.yml as follows:
 ```
 xpack.spaces.enabled: false    <-- Space feature is not supported.
-elasticsearch.url: http://localhost:19200
+elasticsearch.hosts: ["http://localhost:19200"]
 elasticsearch.requestHeadersWhitelist: [ x-proxy-user, cookie ]
 own_home.session.secretkey: the-password-must-be-at-least-32-characters-long
 own_home.session.isSecure: false
@@ -141,7 +141,7 @@ Assume the following situation:
 Set kibana.yml as follows:
 ```
 xpack.spaces.enabled: false    <-- Space feature is not supported.
-elasticsearch.url: https://localhost:19200
+elasticsearch.hosts: ["http://localhost:19200"]
 elasticsearch.ssl.certificateAuthorities: /path/to/this/proxy/server/cert/CA.crt
 elasticsearch.requestHeadersWhitelist: [ remote-user, cookie ]
 own_home.proxy_user_header: remote-user
@@ -164,7 +164,7 @@ own_home.ldap.rolename_attribute: cn
 You can use any port instead of 19200.
 If you set as follows, the proxy port will be 19201.
 ```
-elasticsearch.url: http://localhost:19201
+elasticsearch.hosts: ["http://localhost:19201"]
 ```
 
 ### Extract username from session instead of request header (Experimental)
@@ -179,7 +179,7 @@ Here is an example of integration with [search-guard-kibana-plugin](https://gith
 ```
 xpack.spaces.enabled: false    <-- Space feature is not supported.
 server.defaultRoute: /app/own_home
-elasticsearch.url: http://localhost:19200
+elasticsearch.hosts: ["http://localhost:19200"]
 elasticsearch.requestHeadersWhitelist: [ cookie, authorization ]
 elasticsearch.username: kibanaserver
 elasticsearch.password: kibanaserver
