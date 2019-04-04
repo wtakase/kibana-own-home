@@ -11,13 +11,15 @@ export default function (server, request, remoteUser, groups) {
       currentIndex = config.get('kibana.index');
     }
     const prefix = remoteUser ? config.get('kibana.index') : '';
-    const backHref = './kibana';
+    const isExplicitMode = (remoteUser && config.get('own_home.explicit_kibana_index_url.enabled'));
+    const backHref = (isExplicitMode === true) ? '/' + currentIndex.slice(prefix.length + 1) + '/app/kibana' : './kibana';
 
     return {
       currentKibanaIndex: currentIndex,
       kibanaIndexPrefix: prefix,
       username: remoteUser || '',
       groups: groups || [],
+      explicitMode: isExplicitMode === true ? 'true' : 'false',
       backHref: backHref
     };
   }

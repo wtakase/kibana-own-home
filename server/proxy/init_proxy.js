@@ -8,6 +8,7 @@ import createAgent from './create_agent';
 import mapUri from './map_uri';
 import getReplacedIndex from './get_replaced_index';
 import modifyPayload from './modify_payload';
+import initExplicitProxy from './explicit/init_proxy';
 import Boom from 'boom';
 
 module.exports = function(kbnServer) {
@@ -154,6 +155,9 @@ module.exports = function(kbnServer) {
       kbnServer.log(['plugin:own-home', 'error'], err);
     }
 
+    if (kbnServer.config().get('own_home.explicit_kibana_index_url.enabled')) {
+      initExplicitProxy(kbnServer, yarOptions);
+    }
   };
   start();
 };
