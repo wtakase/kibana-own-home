@@ -99,6 +99,12 @@ own_home.ldap.member_attribute: member <-- member or memberUid or uniquemember
 own_home.ldap.get_dn_dynamically: false <-- if true, get the user's DN dynamically by using ldap.username_attribute
 own_home.ldap.bind.dn: ''
 own_home.ldap.bind.password: ''
+own_home.explicit_kibana_index_url.enabled: false
+own_home.explicit_kibana_index_url.proxy.url: http://localhost:15601
+own_home.explicit_kibana_index_url.proxy.ssl.certificate: '' <-- specify this kibana proxy's server cert location if necessary
+own_home.explicit_kibana_index_url.proxy.ssl.key: '' <-- specify this kibana proxy's server cert location if necessary
+own_home.explicit_kibana_index_url.kibana.ssl.verificationMode: true
+own_home.explicit_kibana_index_url.kibana.ssl.certificateAuthorities: '' <-- specify your kibana cert's CA cert location if necessary
 own_home.force_to_access_by_es_user: false <-- override authorization header to force to access by elasticsearch.username
 ```
 
@@ -194,6 +200,33 @@ searchguard.cookie.password: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 ```
 
 ![demo_extract_username_from_session](https://github.com/wtakase/kibana-own-home/raw/master/images/demo_extract_username_from_session.gif "demo_extract_username_from_session")
+
+### Use explicit kibana.index in URL feature (Experimental)
+
+This enables to display current kibana.index in URL, so that it is possible users to know it explicitly.
+
+Configure your httpd as follows:
+```
+RewriteEngine on
+RewriteRule  ^/?(.*)$ http://localhost:15601/$1 [L,P]
+RequestHeader set X-Proxy-User %{REMOTE_USER}e
+<Location />
+  AuthType Basic
+  AuthName "Basic Authentication"
+  AuthUserFile /path/to/htpasswd
+  Require valid-user
+</Location>
+```
+
+Add the following line to kibana.yml:
+```
+own_home.explicit_kibana_index_url.enabled: true
+```
+
+#### Example: Work on `.kibana_public`:
+Access => http://frontendserver/public/app/kibana
+
+![explicit_kibana_index_url](https://github.com/wtakase/kibana-own-home/raw/master/images/explicit_kibana_index_url.gif "explicit_kibana_index_url")
 
 ## Set default kibana.index by URL
 

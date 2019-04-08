@@ -65,6 +65,22 @@ export default function (kibana) {
             password: Joi.string()
           }).default()
         }).default(),
+        explicit_kibana_index_url: Joi.object({
+          enabled: Joi.boolean().default(false),
+          proxy: Joi.object({
+            url: Joi.string().default('http://localhost:15601'),
+            ssl: Joi.object({
+              certificate: Joi.string(),
+              key: Joi.string()
+            }).default()
+          }).default(),
+          kibana: Joi.object({
+            ssl: Joi.object({
+              verificationMode: Joi.boolean().default(true),
+              certificateAuthorities: Joi.string()
+            }).default()
+          }).default()
+        }).default(),
         wait_kibana_index_creation: Joi.number().default(3000),
         force_to_access_by_es_user: Joi.boolean().default(false)
       }).default();
