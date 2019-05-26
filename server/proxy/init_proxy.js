@@ -104,9 +104,17 @@ module.exports = function(kbnServer) {
                     }
                   }
                 }
+
+                // https://stackoverflow.com/questions/5515869
+                function lengthInUtf8Bytes(str) {
+                  // Matches only the 10.. bytes that are non-initial characters in a multi-byte sequence.
+                  var m = encodeURIComponent(str).match(/%[89ABab]/g);
+                  return str.length + (m ? m.length : 0);
+                }
+
                 const r = h.response(p);
                 r.headers = response.headers;
-                return r.header('Content-length', JSON.stringify(p).length);
+                return r.header('Content-length', lengthInUtf8Bytes(JSON.stringify(p)));
               } catch (err) {
                 throw err;
               }
