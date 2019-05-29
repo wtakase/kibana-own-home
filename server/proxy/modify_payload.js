@@ -27,11 +27,11 @@ export default function modifyPayload(server) {
     // Replace kibana.index in mget request body
     async function replaceRequestBody(body) {
       if (!request.path.endsWith('_mget')) {
-        return new Buffer(body);
+        return new Buffer.from(body);
       }
       try {
         if (!body) {
-          return new Buffer(body);
+          return new Buffer.from(body);
         }
         let data = JSON.parse(body);
         let payload = '';
@@ -60,10 +60,10 @@ export default function modifyPayload(server) {
             server.log(['plugin:own-home', 'debug'], 'Replaced request payload: ' + payload);
           }
         }
-        return new Buffer(payload);
+        return new Buffer.from(payload);
       } catch (err) {
         server.log(['plugin:own-home', 'error'], 'Bad JSON format: ' + body + ': ' + err);
-        return new Buffer(body);
+        return new Buffer.from(body);
       }
     }
 

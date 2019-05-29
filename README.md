@@ -63,10 +63,10 @@ RequestHeader set X-Proxy-User %{REMOTE_USER}s
 
 **Important:** Before setting up own-home, you should take a backup of your `kibana.yml` if you wish to remove the plugin in future.
 
-* Kibana 6
+* Kibana 7
 
 ```
-bin/kibana-plugin install https://github.com/wtakase/kibana-own-home/releases/download/v6.8.0/own_home-6.8.0.zip
+bin/kibana-plugin install https://github.com/wtakase/kibana-own-home/releases/download/v7.0.0/own_home-7.0.0.zip
 ```
 
 ## Options

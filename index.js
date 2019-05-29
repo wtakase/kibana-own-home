@@ -81,7 +81,7 @@ export default function (kibana) {
             }).default()
           }).default()
         }).default(),
-        wait_kibana_index_creation: Joi.number().default(3000),
+        wait_kibana_index_creation: Joi.number().default(0),
         force_to_access_by_es_user: Joi.boolean().default(false)
       }).default();
     },

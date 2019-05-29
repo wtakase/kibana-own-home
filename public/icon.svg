@@ -1,12 +1,22 @@
-<!--?xml version="1.0" encoding="utf-8"?-->
-<!-- Generator: Adobe Illustrator 15.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
-
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="500px" height="500px" viewBox="0 0 500 500">
-<path fill="#FFFFFF" d="M76.403,450.517c0,0-0.412,10.62,9.967,10.62c12.923,0,119.849-0.138,119.849-0.138l0.189-98.212
-	c0,0-1.701-16.188,14.023-16.188h49.733c18.577,0,17.426,16.188,17.426,16.188l-0.206,97.903c0,0,101.392,0,117.322,0
-	c13.181,0,12.579-13.232,12.579-13.232V266.396L251.948,119.31L76.403,266.396V450.517z" id="path-0"></path>
-<path fill="#FFFFFF" d="M11.753,252.7c0,0,14.917,27.479,47.414,0L253.409,88.377l182.109,163.309c37.636,27.136,51.728,0,51.728,0
-	L253.409,39.863L11.753,252.7z" id="path-1" style="position: relative;"></path>
-<polygon fill="#FFFFFF" points="431.103,87.981 384.256,87.981 384.462,144.795 431.103,184.372 "></polygon>
-<circle fill="#FFFFFF" cx="245.923" cy="305.658" r="25.641" id="circle-0" style="position: relative;"></circle>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 22.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="own_home" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 500 500" style="enable-background:new 0 0 500 500;" xml:space="preserve">
+<style type="text/css">
+	.st0{display:none;fill:#6A6C73;}
+	.st1{fill:#449588;}
+	.st2{fill:#FFFFFF;}
+</style>
+<rect id="background" x="-64" y="-34" class="st0" width="634" height="602"/>
+<path id="roof" class="st1" d="M254.1,20L0,243.8c0,0,15.7,28.9,49.9,0L254.1,71l191.5,171.7c39.6,28.5,54.4,0,54.4,0L254.1,20z"/>
+<path id="wall" d="M426.4,456.7V266.3L252.6,111.6L68,266.3v193.6c0,0-0.4,11.2,10.5,11.2c13.6,0,126-0.1,126-0.1l0.2-103.3
+	c0,0-1.8-17,14.7-17h52.3c19.5,0,18.3,17,18.3,17l-0.2,102.9c0,0,106.6,0,123.4,0C427.1,470.6,426.4,456.7,426.4,456.7z
+	 M400.1,444.3h-84l0.2-76c0.3-8.8-2.5-21-11.2-30.5c-5.7-6.2-16.2-13.5-33.4-13.5h-52.3c-12.2,0-23,4.6-30.6,12.9
+	c-8.6,9.5-11,22.1-10.5,31.3l-0.1,76.1c-25.2,0-62.4,0.1-84,0.1V278.5L252,146.3L400.1,278V444.3z"/>
+<path id="chimney" d="M377.1,23.3l0.3,77.4l63.5,53.9V23.3H377.1z M414.7,97.9l-11-9.3l-0.1-38.9h11.1V97.9z"/>
+<path id="inner_wall" class="st2" d="M94.3,278.5v166.2c21.6,0,58.8-0.1,84-0.1l0.1-76.1c-0.5-9.3,1.9-21.8,10.5-31.3
+	c7.5-8.3,18.4-12.9,30.6-12.9h52.3c17.2,0,27.6,7.3,33.4,13.5c8.8,9.4,11.5,21.7,11.2,30.5l-0.2,76h84V278.1L252.1,146.3L94.3,278.5
+	z"/>
+<ellipse id="window" class="st1" cx="250" cy="260.4" rx="47.1" ry="47.1"/>
+<polygon id="inner_chimney" class="st2" points="403.7,88.5 414.7,97.9 414.7,49.6 403.5,49.6 "/>
 </svg>

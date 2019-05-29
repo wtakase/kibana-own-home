@@ -1,7 +1,6 @@
 import { defaults, omit, trimEnd, trimStart } from 'lodash';
 import { parse as parseUrl, format as formatUrl, resolve } from 'url';
 import createKibanaIndex from './create_kibana_index';
-import migrateConfig from './migrate_config';
 import getReplacedIndex from './get_replaced_index';
 import createClient from './create_client';
 import getRemoteUser from '../get_remote_user';
@@ -64,7 +63,7 @@ export default function mapUri(server) {
           const username = config.get('elasticsearch.username');
           const password = config.get('elasticsearch.password');
           if (username && password) {
-            request.headers['Authorization'] = 'Basic ' + new Buffer(username + ':' + password).toString('base64');
+            request.headers['Authorization'] = 'Basic ' + new Buffer.from(username + ':' + password).toString('base64');
             server.log(['plugin:own-home', 'debug'], 'authorization header has been overridden.');
           }
         }
@@ -112,10 +111,7 @@ export default function mapUri(server) {
       const client = createClient(server);
       return client.indices.exists({ index: replacedIndex }).then(function (exists) {
         if (exists === true) {
-          // Ignore 409 error: 'document_already_exists_exception'
-          return migrateConfig(server, replacedIndex, [409]).then(function () {
-                   return coreMapUri(replacedPath, 'migrated');
-                 });
+          return coreMapUri(replacedPath, false);
         } else {
           return createKibanaIndex(server, replacedIndex).then(function () {
                    return coreMapUri(replacedPath, 'created')
