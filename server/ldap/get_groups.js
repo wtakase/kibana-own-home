@@ -33,6 +33,7 @@ export default function (server, request, remoteUser) {
       };
       let dn;
       const dnEntries = await client.search(userbase, options);
+      await client.unbind();
       try {
         dn = dnEntries[0].dn;
       } catch (e) {
@@ -44,6 +45,7 @@ export default function (server, request, remoteUser) {
     }
 
     const entries = await client.search(ldapConfig.rolebase, ldapConfig.options);
+    await client.unbind();
     for (let entry of entries) {
         groups.push(entry.cn)
     }
